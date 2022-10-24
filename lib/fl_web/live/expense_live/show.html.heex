@@ -1,0 +1,46 @@
+<h1>Show Expense</h1>
+
+<%= if @live_action in [:edit] do %>
+  <.modal return_to={Routes.expense_show_path(@socket, :show, @expense)}>
+    <.live_component
+      module={FlWeb.ExpenseLive.FormComponent}
+      id={@expense.id}
+      title={@page_title}
+      action={@live_action}
+      expense={@expense}
+      return_to={Routes.expense_show_path(@socket, :show, @expense)}
+    />
+  </.modal>
+<% end %>
+
+<ul>
+
+  <li>
+    <strong>Name:</strong>
+    <%= @expense.name %>
+  </li>
+
+  <li>
+    <strong>Img:</strong>
+    <%= @expense.img %>
+  </li>
+
+  <li>
+    <strong>Timestamp:</strong>
+    <%= @expense.timestamp %>
+  </li>
+
+  <li>
+    <strong>Type:</strong>
+    <%= @expense.type %>
+  </li>
+
+  <li>
+    <strong>Value:</strong>
+    <%= @expense.value %>
+  </li>
+
+</ul>
+
+<span><%= live_patch "Edit", to: Routes.expense_show_path(@socket, :edit, @expense), class: "button" %></span> |
+<span><%= live_redirect "Back", to: Routes.expense_index_path(@socket, :index) %></span>

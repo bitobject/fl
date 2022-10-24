@@ -1,0 +1,31 @@
+<h1>Show Card</h1>
+
+<%= if @live_action in [:edit] do %>
+  <.modal return_to={Routes.card_show_path(@socket, :show, @card)}>
+    <.live_component
+      module={FlWeb.CardLive.FormComponent}
+      id={@card.id}
+      title={@page_title}
+      action={@live_action}
+      card={@card}
+      return_to={Routes.card_show_path(@socket, :show, @card)}
+    />
+  </.modal>
+<% end %>
+
+<ul>
+
+  <li>
+    <strong>Name:</strong>
+    <%= @card.name %>
+  </li>
+
+  <li>
+    <strong>Img:</strong>
+    <%= @card.img %>
+  </li>
+
+</ul>
+
+<span><%= live_patch "Edit", to: Routes.card_show_path(@socket, :edit, @card), class: "button" %></span> |
+<span><%= live_redirect "Back", to: Routes.card_index_path(@socket, :index) %></span>

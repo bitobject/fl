@@ -1,0 +1,41 @@
+<h1>Listing Cards</h1>
+
+<%= if @live_action in [:new, :edit] do %>
+  <.modal return_to={Routes.card_index_path(@socket, :index)}>
+    <.live_component
+      module={FlWeb.CardLive.FormComponent}
+      id={@card.id || :new}
+      title={@page_title}
+      action={@live_action}
+      card={@card}
+      return_to={Routes.card_index_path(@socket, :index)}
+    />
+  </.modal>
+<% end %>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Img</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody id="cards">
+    <%= for card <- @cards do %>
+      <tr id={"card-#{card.id}"}>
+        <td><%= card.name %></td>
+        <td><%= card.img %></td>
+
+        <td>
+          <span><%= live_redirect "Show", to: Routes.card_show_path(@socket, :show, card) %></span>
+          <span><%= live_patch "Edit", to: Routes.card_index_path(@socket, :edit, card) %></span>
+          <span><%= link "Delete", to: "#", phx_click: "delete", phx_value_id: card.id, data: [confirm: "Are you sure?"] %></span>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<span><%= live_patch "New Card", to: Routes.card_index_path(@socket, :new) %></span>

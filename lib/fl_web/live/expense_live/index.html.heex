@@ -13,14 +13,24 @@
   </.modal>
 <% end %>
 
+<div class="bg-gray-50 text-slate-500">
+  <div class="flex max-w-3xl">
+    <FlWeb.Components.Card.card id="day_expenses" title="Today's Expense" expenses={@day_expenses} />
+    <FlWeb.Components.Card.card id="week_expenses" title="Week's Expense" expenses={@week_expenses} />
+    <FlWeb.Components.Card.card id="month_expenses" title="Month's Expense" expenses={@month_expenses} />      
+  </div> 
+  <%= live_patch to: Routes.expense_index_path(@socket, :new), class: "block" do %>
+    <FlWeb.Components.Card.main_card id="new_expense" title="Add Expense" />
+  <% end %>
+</div>
+
 <table>
   <thead>
     <tr>
-      <th>Name</th>
-      <th>Img</th>
+      <th>Value</th>
       <th>Timestamp</th>
       <th>Type</th>
-      <th>Value</th>
+      <th>Name</th>
 
       <th></th>
     </tr>
@@ -28,11 +38,11 @@
   <tbody id="expenses">
     <%= for expense <- @expenses do %>
       <tr id={"expense-#{expense.id}"}>
-        <td><%= expense.name %></td>
-        <td><%= expense.img %></td>
+        <td><%= expense.value %></td>
         <td><%= expense.timestamp %></td>
         <td><%= expense.type %></td>
-        <td><%= expense.value %></td>
+        <td><%= expense.name %></td>
+        
 
         <td>
           <span><%= live_redirect "Show", to: Routes.expense_show_path(@socket, :show, expense) %></span>
@@ -43,5 +53,3 @@
     <% end %>
   </tbody>
 </table>
-
-<span><%= live_patch "New Expense", to: Routes.expense_index_path(@socket, :new) %></span>

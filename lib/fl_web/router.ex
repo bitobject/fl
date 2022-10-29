@@ -78,17 +78,6 @@ defmodule FlWeb.Router do
     get "/users/settings", UserSettingsController, :edit
     put "/users/settings", UserSettingsController, :update
     get "/users/settings/confirm_email/:token", UserSettingsController, :confirm_email
-  end
-
-  scope "/", FlWeb do
-    pipe_through [:browser]
-
-    delete "/users/log_out", UserSessionController, :delete
-    get "/users/confirm", UserConfirmationController, :new
-    post "/users/confirm", UserConfirmationController, :create
-    get "/users/confirm/:token", UserConfirmationController, :edit
-    post "/users/confirm/:token", UserConfirmationController, :update
-
 
     live "/expenses", ExpenseLive.Index, :index
     live "/expenses/new", ExpenseLive.Index, :new
@@ -110,5 +99,15 @@ defmodule FlWeb.Router do
 
     live "/categories/:id", CategoryLive.Show, :show
     live "/categories/:id/show/edit", CategoryLive.Show, :edit
+  end
+
+  scope "/", FlWeb do
+    pipe_through [:browser]
+
+    delete "/users/log_out", UserSessionController, :delete
+    get "/users/confirm", UserConfirmationController, :new
+    post "/users/confirm", UserConfirmationController, :create
+    get "/users/confirm/:token", UserConfirmationController, :edit
+    post "/users/confirm/:token", UserConfirmationController, :update
   end
 end

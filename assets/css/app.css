@@ -1,5 +1,8 @@
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
 /* This file is for your main application CSS */
-@import "./phoenix.css";
 
 /* Alerts and form errors used by phx.new */
 .alert {
@@ -32,7 +35,6 @@
 .invalid-feedback {
   color: #a94442;
   display: block;
-  margin: -1rem 0 2rem;
 }
 
 /* LiveView specific classes for your customization */
@@ -67,7 +69,6 @@
   margin: 15vh auto;
   padding: 20px;
   border: 1px solid #888;
-  width: 80%;
 }
 
 .phx-modal-close {
@@ -118,3 +119,4 @@
   0% { opacity: 1; }
   100% { opacity: 0; }
 }
+

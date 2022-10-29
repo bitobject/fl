@@ -1,4 +1,4 @@
-<div>
+<div class="w-full max-w-4xl mx-auto">
   <h2><%= @title %></h2>
 
   <.form
@@ -8,29 +8,17 @@
     phx-target={@myself}
     phx-change="validate"
     phx-submit="save">
-  
-    <%= label f, :name %>
-    <%= text_input f, :name %>
-    <%= error_tag f, :name %>
-  
-    <%= label f, :img %>
-    <%= text_input f, :img %>
-    <%= error_tag f, :img %>
-  
-    <%= label f, :timestamp %>
-    <%= datetime_select f, :timestamp %>
-    <%= error_tag f, :timestamp %>
-  
-    <%= label f, :type %>
-    <%= text_input f, :type %>
-    <%= error_tag f, :type %>
-  
-    <%= label f, :value %>
-    <%= number_input f, :value, step: "any" %>
-    <%= error_tag f, :value %>
-  
-    <div>
-      <%= submit "Save", phx_disable_with: "Saving..." %>
+
+    <%= FlWeb.Components.Inputs.text_input(%{f: f, field: :name}) %>
+    <%= FlWeb.Components.Inputs.select_input(%{f: f, field: :type, options: @types}) %>
+    <%= FlWeb.Components.Inputs.select_input(%{f: f, field: :category_id, options: @categories}) %>
+    <%= FlWeb.Components.Inputs.select_input(%{f: f, field: :card_id, options: [@first_oprtion] ++ @cards, class: "uppercase"}) %>
+    <%= FlWeb.Components.Inputs.select_input(%{f: f, field: :currency, options: @currencies, class: ""}) %>
+    <%= FlWeb.Components.Inputs.date_select_input(%{f: f, field: :timestamp}) %>
+    <%= FlWeb.Components.Inputs.number_input(%{f: f, field: :value}) %>
+
+    <div class="mt-6">
+      <%= submit "Save", class: "block rounded-2xl border w-full p-3", phx_disable_with: "Saving..." %>
     </div>
   </.form>
 </div>

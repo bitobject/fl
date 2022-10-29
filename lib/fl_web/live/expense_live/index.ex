@@ -1,12 +1,21 @@
 defmodule FlWeb.ExpenseLive.Index do
   use FlWeb, :live_view
+  on_mount FlWeb.LiveAuth
 
   alias Fl.Expenses
   alias Fl.Expenses.Expense
 
   @impl true
   def mount(_params, _session, socket) do
-    {:ok, assign(socket, :expenses, list_expenses())}
+    params = [user_id: socket.assigns.current_user.id]
+
+    {:ok,
+     assign(socket,
+       expenses: list_expenses(),
+       day_expenses: list_expenses_by_period(:day, params),
+       week_expenses: list_expenses_by_period(:week, params),
+       month_expenses: list_expenses_by_period(:month, params)
+     )}
   end
 
   @impl true
@@ -21,9 +30,15 @@ defmodule FlWeb.ExpenseLive.Index do
   end
 
   defp apply_action(socket, :new, _params) do
+    expense = %Expense{
+      timestamp: utc_now(),
+      user_id: socket.assigns.current_user.id,
+      value: Money.new(0)
+    }
+
     socket
     |> assign(:page_title, "New Expense")
-    |> assign(:expense, %Expense{})
+    |> assign(:expense, expense)
   end
 
   defp apply_action(socket, :index, _params) do
@@ -43,4 +58,9 @@ defmodule FlWeb.ExpenseLive.Index do
   defp list_expenses do
     Expenses.list_expenses()
   end
+  defp list_expenses_by_period(period, params) do
+    Expenses.list_expenses_by_period(period, params)
+  end
+
+  defp utc_now, do: NaiveDateTime.utc_now()
 end

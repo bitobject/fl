@@ -22,6 +22,21 @@ defmodule Fl.Categories do
   end
 
   @doc """
+  Returns the list of categories name and id.
+
+  ## Examples
+
+      iex> list_categories_name_and_id()
+      [{name, id}, ...]
+
+  """
+  def list_categories_name_and_id do
+    Category
+    |> select([c], {c.name, c.id})
+    |> Repo.all()
+  end
+
+  @doc """
   Gets a single category.
 
   Raises `Ecto.NoResultsError` if the Category does not exist.

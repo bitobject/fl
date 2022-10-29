@@ -3,11 +3,12 @@ defmodule Fl.Expenses.Expense do
   import Ecto.Changeset
 
   schema "expenses" do
-    field :img, :string
+    field :img, :string, default: "img"
     field :name, :string
-    field :timestamp, :naive_datetime
-    field :type, :string
-    field :value, :float
+    field :timestamp, :naive_datetime, autogenerate: {__MODULE__, :utc_now, []}
+    field :type, :string, default: "cash"
+    field :value, Money.Ecto.Map.Type
+    # field :value, :map
     field :card_id, :id
     field :category_id, :id
     field :user_id, :id
@@ -18,7 +19,20 @@ defmodule Fl.Expenses.Expense do
   @doc false
   def changeset(expense, attrs) do
     expense
-    |> cast(attrs, [:name, :img, :timestamp, :type, :value])
-    |> validate_required([:name, :img, :timestamp, :type, :value])
+    |> cast(attrs, [:name, :img, :timestamp, :type, :value, :card_id, :category_id, :user_id])
+    |> validate_required([:name, :img, :timestamp, :type, :value, :category_id, :user_id])
+
+    # |> validate_money(:value)
   end
+
+  defp validate_money(changeset, field) do
+    validate_change(changeset, field, fn
+      _, %Money{amount: value} when value > 0 -> []
+      _, _ -> [value: "must be greater than 0"]
+    end)
+  end
+
+  defp utc_now, do: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+
+  use ExConstructor
 end

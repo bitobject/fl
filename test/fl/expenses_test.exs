@@ -21,7 +21,12 @@ defmodule Fl.ExpensesTest do
     end
 
     test "create_expense/1 with valid data creates a expense" do
-      valid_attrs = %{img: "some img", name: "some name", timestamp: ~N[2022-10-22 22:38:00], type: "some type"}
+      valid_attrs = %{
+        img: "some img",
+        name: "some name",
+        timestamp: ~N[2022-10-22 22:38:00],
+        type: "some type"
+      }
 
       assert {:ok, %Expense{} = expense} = Expenses.create_expense(valid_attrs)
       assert expense.img == "some img"
@@ -36,7 +41,13 @@ defmodule Fl.ExpensesTest do
 
     test "update_expense/2 with valid data updates the expense" do
       expense = expense_fixture()
-      update_attrs = %{img: "some updated img", name: "some updated name", timestamp: ~N[2022-10-23 22:38:00], type: "some updated type"}
+
+      update_attrs = %{
+        img: "some updated img",
+        name: "some updated name",
+        timestamp: ~N[2022-10-23 22:38:00],
+        type: "some updated type"
+      }
 
       assert {:ok, %Expense{} = expense} = Expenses.update_expense(expense, update_attrs)
       assert expense.img == "some updated img"
@@ -81,7 +92,13 @@ defmodule Fl.ExpensesTest do
     end
 
     test "create_expense/1 with valid data creates a expense" do
-      valid_attrs = %{img: "some img", name: "some name", timestamp: ~N[2022-10-22 22:39:00], type: "some type", value: 120.5}
+      valid_attrs = %{
+        img: "some img",
+        name: "some name",
+        timestamp: ~N[2022-10-22 22:39:00],
+        type: "some type",
+        value: 120.5
+      }
 
       assert {:ok, %Expense{} = expense} = Expenses.create_expense(valid_attrs)
       assert expense.img == "some img"
@@ -97,7 +114,14 @@ defmodule Fl.ExpensesTest do
 
     test "update_expense/2 with valid data updates the expense" do
       expense = expense_fixture()
-      update_attrs = %{img: "some updated img", name: "some updated name", timestamp: ~N[2022-10-23 22:39:00], type: "some updated type", value: 456.7}
+
+      update_attrs = %{
+        img: "some updated img",
+        name: "some updated name",
+        timestamp: ~N[2022-10-23 22:39:00],
+        type: "some updated type",
+        value: 456.7
+      }
 
       assert {:ok, %Expense{} = expense} = Expenses.update_expense(expense, update_attrs)
       assert expense.img == "some updated img"
@@ -143,7 +167,13 @@ defmodule Fl.ExpensesTest do
     end
 
     test "create_expense/1 with valid data creates a expense" do
-      valid_attrs = %{img: "some img", name: "some name", timestamp: ~N[2022-10-22 22:41:00], type: "some type", value: 120.5}
+      valid_attrs = %{
+        img: "some img",
+        name: "some name",
+        timestamp: ~N[2022-10-22 22:41:00],
+        type: "some type",
+        value: 120.5
+      }
 
       assert {:ok, %Expense{} = expense} = Expenses.create_expense(valid_attrs)
       assert expense.img == "some img"
@@ -159,7 +189,14 @@ defmodule Fl.ExpensesTest do
 
     test "update_expense/2 with valid data updates the expense" do
       expense = expense_fixture()
-      update_attrs = %{img: "some updated img", name: "some updated name", timestamp: ~N[2022-10-23 22:41:00], type: "some updated type", value: 456.7}
+
+      update_attrs = %{
+        img: "some updated img",
+        name: "some updated name",
+        timestamp: ~N[2022-10-23 22:41:00],
+        type: "some updated type",
+        value: 456.7
+      }
 
       assert {:ok, %Expense{} = expense} = Expenses.update_expense(expense, update_attrs)
       assert expense.img == "some updated img"

@@ -4,9 +4,27 @@ defmodule FlWeb.ExpenseLiveTest do
   import Phoenix.LiveViewTest
   import Fl.ExpensesFixtures
 
-  @create_attrs %{img: "some img", name: "some name", timestamp: %{day: 22, hour: 22, minute: 41, month: 10, year: 2022}, type: "some type", value: 120.5}
-  @update_attrs %{img: "some updated img", name: "some updated name", timestamp: %{day: 23, hour: 22, minute: 41, month: 10, year: 2022}, type: "some updated type", value: 456.7}
-  @invalid_attrs %{img: nil, name: nil, timestamp: %{day: 30, hour: 22, minute: 41, month: 2, year: 2022}, type: nil, value: nil}
+  @create_attrs %{
+    img: "some img",
+    name: "some name",
+    timestamp: %{day: 22, hour: 22, minute: 41, month: 10, year: 2022},
+    type: "some type",
+    value: 120.5
+  }
+  @update_attrs %{
+    img: "some updated img",
+    name: "some updated name",
+    timestamp: %{day: 23, hour: 22, minute: 41, month: 10, year: 2022},
+    type: "some updated type",
+    value: 456.7
+  }
+  @invalid_attrs %{
+    img: nil,
+    name: nil,
+    timestamp: %{day: 30, hour: 22, minute: 41, month: 2, year: 2022},
+    type: nil,
+    value: nil
+  }
 
   defp create_expense(_) do
     expense = expense_fixture()

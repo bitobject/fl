@@ -7,7 +7,7 @@ defmodule Fl.Repo.Migrations.CreateExpenses do
       add :img, :string
       add :timestamp, :naive_datetime
       add :type, :string
-      add :value, :float
+      add :value, :map
       add :card_id, references(:cards, on_delete: :nothing)
       add :category_id, references(:categories, on_delete: :nothing)
       add :user_id, references(:users, on_delete: :nothing)

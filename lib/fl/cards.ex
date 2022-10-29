@@ -22,6 +22,21 @@ defmodule Fl.Cards do
   end
 
   @doc """
+  Returns the list of cards name and id.
+
+  ## Examples
+
+      iex> list_cards_name_and_id()
+      [{name, id}, ...]
+
+  """
+  def list_cards_name_and_id do
+    Card
+    |> select([c], {c.name, c.id})
+    |> Repo.all()
+  end
+
+  @doc """
   Gets a single card.
 
   Raises `Ecto.NoResultsError` if the Card does not exist.

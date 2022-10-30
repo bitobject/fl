@@ -27,6 +27,7 @@ COPY assets assets
 COPY lib lib
 
 RUN mix compile
+RUN mix assets.deploy
 
 COPY config/runtime.exs config/
 

@@ -1,6 +1,6 @@
 ARG MIX_ENV="prod"
 
-FROM hexpm/elixir:1.13.4-erlang-23.2.7.5-alpine-3.15.4 AS build
+FROM elixir:1.14.1-alpine AS build
 
 WORKDIR /app
 
@@ -33,7 +33,7 @@ COPY config/runtime.exs config/
 RUN mix phx.gen.release && \
     mix release
 
-FROM alpine:3.14.2 AS app
+FROM alpine:3.16.2 AS app
 
 ARG MIX_ENV
 

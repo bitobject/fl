@@ -13,7 +13,7 @@ config :fl, FlWeb.Endpoint,
   cache_static_manifest: "priv/static/cache_manifest.json",
   server: true,
   root: ".",
-  version: Application.spec(:mk, :vsn),
+  version: Application.spec(:fl, :vsn),
   check_origin: false
 
 # Do not print debug messages in production

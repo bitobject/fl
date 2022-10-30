@@ -1,6 +1,6 @@
 ARG MIX_ENV="prod"
 
-FROM hexpm/elixir:1.14.1-erlang-25.1.2-alpine-3.16.2 AS build
+FROM hexpm/elixir:1.13.4-erlang-23.2.7.5-alpine-3.15.4 AS build
 
 WORKDIR /app
 

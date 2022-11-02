@@ -181,6 +181,37 @@ defmodule Fl.Accounts do
 
   ## Examples
 
+      iex> change_user_timezone(user)
+      %Ecto.Changeset{data: %User{}}
+
+  """
+  def change_user_timezone(%User{} = user, attrs \\ %{}) do
+    User.change_user_timezone(user, attrs)
+  end
+
+  @doc """
+  Updates User Timezone.
+
+  ## Examples
+
+      iex> update_user_timezone(%{timezone: value})
+      {:ok, %User{}}
+
+      iex> update_user_timezone(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_user_timezone(%User{} = user, attrs \\ %{}) do
+    user
+    |> User.change_user_timezone(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking user changes.
+
+  ## Examples
+
       iex> change_user_registration(user)
       %Ecto.Changeset{data: %User{}}
 

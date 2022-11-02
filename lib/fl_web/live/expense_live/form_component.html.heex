@@ -14,7 +14,7 @@
     <%= FlWeb.Components.Inputs.select_input(%{f: f, field: :category_id, options: @categories}) %>
     <%= FlWeb.Components.Inputs.select_input(%{f: f, field: :card_id, options: [@first_oprtion] ++ @cards, class: "uppercase"}) %>
     <%= FlWeb.Components.Inputs.select_input(%{f: f, field: :currency, options: @currencies, class: ""}) %>
-    <%= FlWeb.Components.Inputs.date_select_input(%{f: f, field: :timestamp}) %>
+    <%= FlWeb.Components.Inputs.datetime_select_input(%{f: f, field: :timestamp}) %>
     <%= FlWeb.Components.Inputs.number_input(%{f: f, field: :value}) %>
 
     <div class="mt-6">

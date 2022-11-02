@@ -4,7 +4,9 @@ defmodule FlWeb.UserSettingsController do
   alias Fl.Accounts
   alias FlWeb.UserAuth
 
-  plug :assign_email_and_password_changesets
+  @first_oprtion [key: "---select---", value: "", disabled: true, selected: true]
+
+  plug :assign_changesets
 
   def edit(conn, _params) do
     render(conn, "edit.html")
@@ -50,6 +52,21 @@ defmodule FlWeb.UserSettingsController do
     end
   end
 
+  def update(conn, %{"action" => "update_timezone"} = params) do
+    %{"user" => timezone_params} = params
+    user = conn.assigns.current_user
+
+    case Accounts.update_user_timezone(user, timezone_params) do
+      {:ok, user} ->
+        conn
+        |> put_flash(:info, "Timezone changed successfully")
+        |> redirect(to: Routes.user_settings_path(conn, :edit))
+
+      {:error, changeset} ->
+        render(conn, "edit.html", changeset: changeset)
+    end
+  end
+
   def confirm_email(conn, %{"token" => token}) do
     case Accounts.update_user_email(conn.assigns.current_user, token) do
       :ok ->
@@ -64,11 +81,14 @@ defmodule FlWeb.UserSettingsController do
     end
   end
 
-  defp assign_email_and_password_changesets(conn, _opts) do
+  defp assign_changesets(conn, _opts) do
     user = conn.assigns.current_user
 
     conn
     |> assign(:email_changeset, Accounts.change_user_email(user))
     |> assign(:password_changeset, Accounts.change_user_password(user))
+    |> assign(:timezone_changeset, Accounts.change_user_timezone(user))
+    |> assign(:timezones, Tzdata.zone_list())
+    |> assign(:first_oprtion, @first_oprtion)
   end
 end

@@ -52,7 +52,8 @@ defmodule Fl.MixProject do
       {:plug_cowboy, "~> 2.5"},
       {:tailwind, "~> 0.1", runtime: Mix.env() == :dev},
       {:exconstructor, "~> 1.2.8"},
-      {:money, "~> 1.11"}
+      {:money, "~> 1.11"},
+      {:timex, "~> 3.7"}
     ]
   end
 

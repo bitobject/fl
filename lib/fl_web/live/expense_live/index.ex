@@ -8,13 +8,15 @@ defmodule FlWeb.ExpenseLive.Index do
   @impl true
   def mount(_params, _session, socket) do
     params = [user_id: socket.assigns.current_user.id]
+    timezone = socket.assigns.current_user.timezone
 
     {:ok,
      assign(socket,
        expenses: list_expenses(),
-       day_expenses: list_expenses_by_period(:day, params),
-       week_expenses: list_expenses_by_period(:week, params),
-       month_expenses: list_expenses_by_period(:month, params)
+       day_expenses: list_expenses_by_period(:day, params, timezone),
+       week_expenses: list_expenses_by_period(:week, params, timezone),
+       month_expenses: list_expenses_by_period(:month, params, timezone),
+       timezone: timezone
      )}
   end
 
@@ -31,9 +33,8 @@ defmodule FlWeb.ExpenseLive.Index do
 
   defp apply_action(socket, :new, _params) do
     expense = %Expense{
-      timestamp: utc_now(),
-      user_id: socket.assigns.current_user.id,
-      value: Money.new(0)
+      timestamp: local_now(socket.assigns.current_user.timezone),
+      user_id: socket.assigns.current_user.id
     }
 
     socket
@@ -58,9 +59,13 @@ defmodule FlWeb.ExpenseLive.Index do
   defp list_expenses do
     Expenses.list_expenses()
   end
-  defp list_expenses_by_period(period, params) do
-    Expenses.list_expenses_by_period(period, params)
+
+  defp list_expenses_by_period(period, params, timezone) do
+    Expenses.list_expenses_by_period(period, params, timezone)
   end
 
-  defp utc_now, do: NaiveDateTime.utc_now()
+  defp local_now(timezone), do: Timex.now(timezone)
+
+  defp shift_to_local_time(timestamp, timezone),
+    do: Timex.shift(timestamp, seconds: Timex.now(timezone).utc_offset)
 end

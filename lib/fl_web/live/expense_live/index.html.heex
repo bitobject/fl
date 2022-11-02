@@ -8,6 +8,7 @@
       title={@page_title}
       action={@live_action}
       expense={@expense}
+      timezone={@timezone}
       return_to={Routes.expense_index_path(@socket, :index)}
     />
   </.modal>
@@ -39,7 +40,7 @@
     <%= for expense <- @expenses do %>
       <tr id={"expense-#{expense.id}"}>
         <td><%= expense.value %></td>
-        <td><%= expense.timestamp %></td>
+        <td><%= shift_to_local_time(expense.timestamp, @timezone) %></td>
         <td><%= expense.type %></td>
         <td><%= expense.name %></td>
         

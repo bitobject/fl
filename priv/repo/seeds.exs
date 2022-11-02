@@ -40,3 +40,15 @@ Enum.map(
     Fl.Cards.create_card(%{name: i, img: "img"})
   end
 )
+
+for user_params <- [
+      %{email: "a@mail.ru", password: "Lidersit1996", timezone: "Etc/GMT+4"},
+      %{email: "d@mail.ru", password: "Lidersit1996", timezone: "Etc/GMT+4"}
+    ] do
+  user_params
+  |> Fl.Accounts.register_user()
+  |> elem(1)
+  |> Fl.Accounts.User.confirm_changeset()
+  |> Map.put(:action, :update)
+  |> Fl.Repo.update()
+end

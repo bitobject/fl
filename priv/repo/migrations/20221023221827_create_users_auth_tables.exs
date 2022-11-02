@@ -8,6 +8,7 @@ defmodule Fl.Repo.Migrations.CreateUsersAuthTables do
       add :name, :string
       add :img, :string
       add :email, :citext, null: false
+      add :timezone, :string, null: false
       add :hashed_password, :string, null: false
       add :confirmed_at, :naive_datetime
 

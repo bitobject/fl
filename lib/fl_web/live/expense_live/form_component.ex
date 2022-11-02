@@ -30,8 +30,6 @@ defmodule FlWeb.ExpenseLive.FormComponent do
 
   @impl true
   def handle_event("validate", %{"expense" => expense_params}, socket) do
-    expense_params = format_params(expense_params) |> IO.inspect()
-
     changeset =
       socket.assigns.expense
       |> Expenses.change_expense(expense_params)
@@ -46,8 +44,6 @@ defmodule FlWeb.ExpenseLive.FormComponent do
   end
 
   defp save_expense(socket, :edit, expense_params) do
-    expense_params = format_params(expense_params)
-
     case Expenses.update_expense(socket.assigns.expense, expense_params) |> IO.inspect() do
       {:ok, _expense} ->
         {:noreply,
@@ -61,12 +57,13 @@ defmodule FlWeb.ExpenseLive.FormComponent do
   end
 
   defp save_expense(socket, :new, expense_params) do
-    expense_params = format_params(expense_params)
+    expense_params = value_to_money(expense_params)
+    timezone = socket.assigns.timezone
 
     socket.assigns.expense
     |> Expenses.change_expense(expense_params)
     |> Expenses.to_map()
-    |> IO.inspect()
+    |> format_timestamp_params(timezone)
     |> Fl.Expenses.create_expense()
     |> case do
       {:ok, _expense} ->
@@ -86,19 +83,8 @@ defmodule FlWeb.ExpenseLive.FormComponent do
     |> Enum.map(fn {k, v} -> {"#{v.symbol} #{k} #{v.name}", k} end)
   end
 
-  defp format_params(params) do
-    params
-    |> format_timestamp_params()
-    |> value_to_money()
-  end
-
-  defp format_timestamp_params(params) do
-    timestamp_params =
-      params
-      |> Map.get("timestamp", %{})
-      |> Map.merge(%{"hour" => "00", "minute" => "00"})
-
-    Map.put(params, "timestamp", timestamp_params)
+  defp format_timestamp_params(%{timestamp: timestamp} = params, timezone) do
+    %{params | timestamp: timestamp |> Timex.to_datetime(timezone) |> Timex.to_naive_datetime()}
   end
 
   defp value_to_money(%{"value" => ""} = params), do: Map.delete(params, "value")

@@ -1,69 +1,58 @@
-<h1>Settings</h1>
 
-<h3>Change email</h3>
+<h1 class="text-3xl uppercase font-bold text-center w-full mb-16">Settings</h1>
+<div class="flex flex-wrap">
+  <section class="mx-auto max-w-xs mb-12">
+    <h2 class="text-2xl uppercase font-bold text-center w-full mb-4">change email</h2>
 
-<.form let={f} for={@email_changeset} action={Routes.user_settings_path(@conn, :update)} id="update_email">
-  <%= if @email_changeset.action do %>
-    <div class="alert alert-danger">
-      <p>Oops, something went wrong! Please check the errors below.</p>
-    </div>
-  <% end %>
+    <.form let={f} for={@email_changeset} action={Routes.user_settings_path(@conn, :update)} id="update_email">
+      <%= if @email_changeset.action do %>
+        <div class="alert alert-danger">
+          <p>Oops, something went wrong! Please check the errors below.</p>
+        </div>
+      <% end %>
 
-  <%= hidden_input f, :action, name: "action", value: "update_email" %>
+      <%= hidden_input f, :action, name: "action", value: "update_email" %>    
 
-  <%= label f, :email %>
-  <%= email_input f, :email, required: true %>
-  <%= error_tag f, :email %>
+      <div class="text-2xl">
+        <%= FlWeb.Components.Inputs.text_input(%{f: f, field: :email}) %>
+        <%= FlWeb.Components.Inputs.password_input(%{f: f, field: :current_password, required: true}) %>
+        <%= FlWeb.Components.Inputs.submit_button(%{label: "send"}) %>
+      </div>
+    </.form>
+  </section>
+  <section class="mx-auto max-w-xs mb-12">
+    <h2 class="text-2xl uppercase font-bold text-center w-full mb-4">change password</h2>
 
-  <%= label f, :current_password, for: "current_password_for_email" %>
-  <%= password_input f, :current_password, required: true, name: "current_password", id: "current_password_for_email" %>
-  <%= error_tag f, :current_password %>
+    <.form let={f} for={@password_changeset} action={Routes.user_settings_path(@conn, :update)} id="update_password">
+      <%= if @password_changeset.action do %>
+        <div class="alert alert-danger">
+          <p>Oops, something went wrong! Please check the errors below.</p>
+        </div>
+      <% end %>
+      <%= hidden_input f, :action, name: "action", value: "update_password" %>
+      <div class="text-2xl">      
+        <%= FlWeb.Components.Inputs.password_input(%{f: f, field: :password, required: true}) %>
+        <%= FlWeb.Components.Inputs.password_input(%{f: f, field: :password_confirmation, required: true}) %>
+        <%= FlWeb.Components.Inputs.password_input(%{f: f, field: :current_password, required: true, name: "current_password", id: "current_password_for_password"}) %>      
+        <%= FlWeb.Components.Inputs.submit_button(%{label: "change password"}) %>
+      </div>
+    </.form>
+  </section>
+  <section class="mx-auto max-w-xs mb-12">
+    <h2 class="text-2xl uppercase font-bold text-center w-full mb-4">change timezone</h2>
 
-  <div>
-    <%= submit "Change email" %>
-  </div>
-</.form>
+    <.form let={f} for={@timezone_changeset} action={Routes.user_settings_path(@conn, :update)} id="update_timezone">
+      <%= if @timezone_changeset.action do %>
+        <div class="alert alert-danger">
+          <p>Oops, something went wrong! Please check the errors below.</p>
+        </div>
+      <% end %>
+      <%= hidden_input f, :action, name: "action", value: "update_timezone" %>
 
-<h3>Change password</h3>
-
-<.form let={f} for={@password_changeset} action={Routes.user_settings_path(@conn, :update)} id="update_password">
-  <%= if @password_changeset.action do %>
-    <div class="alert alert-danger">
-      <p>Oops, something went wrong! Please check the errors below.</p>
-    </div>
-  <% end %>
-
-  <%= hidden_input f, :action, name: "action", value: "update_password" %>
-
-  <%= label f, :password, "New password" %>
-  <%= password_input f, :password, required: true %>
-  <%= error_tag f, :password %>
-
-  <%= label f, :password_confirmation, "Confirm new password" %>
-  <%= password_input f, :password_confirmation, required: true %>
-  <%= error_tag f, :password_confirmation %>
-
-  <%= label f, :current_password, for: "current_password_for_password" %>
-  <%= password_input f, :current_password, required: true, name: "current_password", id: "current_password_for_password" %>
-  <%= error_tag f, :current_password %>
-
-  <div>
-    <%= submit "Change password" %>
-  </div>
-</.form>
-
-<.form let={f} for={@timezone_changeset} action={Routes.user_settings_path(@conn, :update)} id="update_timezone">
-  <%= if @timezone_changeset.action do %>
-    <div class="alert alert-danger">
-      <p>Oops, something went wrong! Please check the errors below.</p>
-    </div>
-  <% end %>
-
-  <%= hidden_input f, :action, name: "action", value: "update_timezone" %>
-
-  <%= FlWeb.Components.Inputs.select_input(%{f: f, field: :timezone, options: [@first_oprtion] ++ @timezones}) %>
-
-  <div>
-    <%= submit "Change timezone" %>
-  </div>
-</.form>
+      <div class="text-2xl">
+        <%= FlWeb.Components.Inputs.select_input(%{f: f, field: :timezone, options: [@first_oprtion] ++ @timezones}) %>
+        <%= FlWeb.Components.Inputs.submit_button(%{label: "change timezone"}) %>
+      </div>
+    </.form>
+  </section>
+</div>

@@ -1,12 +1,14 @@
-<h1>Confirm account</h1>
+<section class="mx-auto max-w-xs">
+  <h1 class="text-3xl uppercase font-bold text-center w-full mb-4">confirm account</h1>
 
-<.form let={_f} for={:user} action={Routes.user_confirmation_path(@conn, :update, @token)}>
-  <div>
-    <%= submit "Confirm my account" %>
-  </div>
-</.form>
+  <.form let={_f} for={:user} action={Routes.user_confirmation_path(@conn, :update, @token)}>
+    <div class="text-2xl">
+      <%= FlWeb.Components.Inputs.submit_button(%{label: "confirm"}) %>
+    </div>
+  </.form>
 
-<p>
-  <%= link "Register", to: Routes.user_registration_path(@conn, :new) %> |
-  <%= link "Log in", to: Routes.user_session_path(@conn, :new) %>
-</p>
+  <p class="py-4 text-xl text-center">
+    <%= link "Register", to: Routes.user_registration_path(@conn, :new) %> |
+    <%= link "Log in", to: Routes.user_session_path(@conn, :new) %>
+  </p>
+</section>

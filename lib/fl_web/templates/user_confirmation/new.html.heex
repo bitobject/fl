@@ -1,15 +1,15 @@
-<h1>Resend confirmation instructions</h1>
+<section class="mx-auto max-w-xs">
+  <h1 class="text-3xl uppercase font-bold text-center w-full mb-4">resend confirmation instructions</h1>
 
-<.form let={f} for={:user} action={Routes.user_confirmation_path(@conn, :create)}>
-  <%= label f, :email %>
-  <%= email_input f, :email, required: true %>
+  <.form let={f} for={:user} action={Routes.user_confirmation_path(@conn, :create)}>
+    <div class="text-2xl">
+      <%= FlWeb.Components.Inputs.text_input(%{f: f, field: :email}) %>
+      <%= FlWeb.Components.Inputs.submit_button(%{label: "send"}) %>
+    </div>
+  </.form>
 
-  <div>
-    <%= submit "Resend confirmation instructions" %>
-  </div>
-</.form>
-
-<p>
-  <%= link "Register", to: Routes.user_registration_path(@conn, :new) %> |
-  <%= link "Log in", to: Routes.user_session_path(@conn, :new) %>
-</p>
+  <p class="py-4 text-xl text-center">
+    <%= link "Register", to: Routes.user_registration_path(@conn, :new) %> |
+    <%= link "Log in", to: Routes.user_session_path(@conn, :new) %>
+  </p>
+</section>

@@ -1,4 +1,4 @@
-<h1>Listing Expenses</h1>
+<h1 class="text-3xl uppercase font-bold text-center w-full mb-12">listing expenses</h1>
 
 <%= if @live_action in [:new, :edit] do %>
   <.modal return_to={Routes.expense_index_path(@socket, :index)}>
@@ -14,8 +14,8 @@
   </.modal>
 <% end %>
 
-<div class="bg-gray-50 text-slate-500">
-  <div class="flex max-w-3xl">
+<div class="flex w-full mb-12">
+  <div class="grid gap-4 mr-4">
     <FlWeb.Components.Card.card id="day_expenses" title="Today's Expense" expenses={@day_expenses} />
     <FlWeb.Components.Card.card id="week_expenses" title="Week's Expense" expenses={@week_expenses} />
     <FlWeb.Components.Card.card id="month_expenses" title="Month's Expense" expenses={@month_expenses} />      

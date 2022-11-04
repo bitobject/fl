@@ -25,12 +25,12 @@ defmodule FlWeb.Components.Card do
 
   def main_card(assigns) do
     ~H"""
-      <div {@rest}>
-        <div class="w-full max-w-xs h-40 p-4 bg-gray-900 rounded-2xl text-center text-gray-200 py-12">
-          <h5 class="text-2xl font-bold"><%= @title %></h5>
-          <%= render_slot(@inner_block) %>
-        </div>
+    <div {@rest}>
+      <div class="w-full max-w-xs p-4 bg-gray-900 rounded-2xl text-center text-gray-200 py-12">
+        <h5 class="text-2xl font-bold"><%= @title %></h5>
+        <%= render_slot(@inner_block) %>
       </div>
+    </div>
     """
   end
 end

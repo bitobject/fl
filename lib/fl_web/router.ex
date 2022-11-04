@@ -64,6 +64,7 @@ defmodule FlWeb.Router do
     live "/", ExpenseLive.Index, :index
     live "/expenses/new", ExpenseLive.Index, :new
     live "/expenses/:id/edit", ExpenseLive.Index, :edit
+    live "/expenses/total_new", ExpenseLive.Index, :total_new
 
     live "/expenses/:id", ExpenseLive.Show, :show
     live "/expenses/:id/show/edit", ExpenseLive.Show, :edit
@@ -81,6 +82,27 @@ defmodule FlWeb.Router do
 
     live "/categories/:id", CategoryLive.Show, :show
     live "/categories/:id/show/edit", CategoryLive.Show, :edit
+
+    live "/groups", GroupLive.Index, :index
+    live "/groups/new", GroupLive.Index, :new
+    live "/groups/:id/edit", GroupLive.Index, :edit
+
+    live "/groups/:id", GroupLive.Show, :show
+    live "/groups/:id/show/edit", GroupLive.Show, :edit
+
+    live "/users", UserLive.Index, :index
+    live "/users/new", UserLive.Index, :new
+    live "/users/:id/edit", UserLive.Index, :edit
+
+    live "/users/:id", UserLive.Show, :show
+    live "/users/:id/show/edit", UserLive.Show, :edit
+
+    live "/total_expenses", TotalExpenseLive.Index, :index
+    live "/total_expenses/new", TotalExpenseLive.Index, :new
+    live "/total_expenses/:id/edit", TotalExpenseLive.Index, :edit
+
+    live "/total_expenses/:id", TotalExpenseLive.Show, :show
+    live "/total_expenses/:id/show/edit", TotalExpenseLive.Show, :edit
   end
 
   scope "/", FlWeb do

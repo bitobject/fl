@@ -19,12 +19,16 @@ defmodule FlWeb.UserRegistrationController do
             &Routes.user_confirmation_url(conn, :edit, &1)
           )
 
+        user_return_to = get_session(conn, :user_return_to)
+
         conn
         |> put_flash(:info, "User created successfully.")
-        |> UserAuth.log_in_user(user)
+        |> redirect(to: user_return_to || signed_in_path(conn))
 
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "new.html", changeset: changeset)
     end
   end
+
+  defp signed_in_path(conn), do: Routes.user_session_path(conn, :new)
 end

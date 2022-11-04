@@ -2,6 +2,8 @@ defmodule Fl.Accounts.UserToken do
   use Ecto.Schema
   import Ecto.Query
   alias Fl.Accounts.UserToken
+  alias Fl.Accounts.User
+  alias Fl.Groups.Group
 
   @hash_algorithm :sha256
   @rand_size 32
@@ -17,7 +19,7 @@ defmodule Fl.Accounts.UserToken do
     field :token, :binary
     field :context, :string
     field :sent_to, :string
-    belongs_to :user, Fl.Accounts.User
+    belongs_to :user, User
 
     timestamps(updated_at: false)
   end
@@ -58,7 +60,9 @@ defmodule Fl.Accounts.UserToken do
     query =
       from token in token_and_context_query(token, "session"),
         join: user in assoc(token, :user),
+        # join: group in assoc(user, :group),
         where: token.inserted_at > ago(@session_validity_in_days, "day"),
+        # select: %{user | group: group}
         select: user
 
     {:ok, query}

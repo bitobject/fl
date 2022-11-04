@@ -1,14 +1,14 @@
-defmodule FlWeb.ExpenseLive.FormComponent do
+defmodule FlWeb.TotalExpenseLive.FormComponent do
   use FlWeb, :live_component
 
-  alias Fl.{Cards, Categories, Expenses}
+  alias Fl.{Cards, Categories, TotalExpenses}
 
   @first_oprtion [key: "---select---", value: "", disabled: true, selected: true]
   @default_currencies ~w(EUR RUB USD AMD)a
 
   @impl true
-  def update(%{expense: expense} = assigns, socket) do
-    changeset = Expenses.change_expense(expense)
+  def update(%{total_expense: total_expense} = assigns, socket) do
+    changeset = TotalExpenses.change_total_expense(total_expense)
     categories = Categories.list_categories_name_and_id()
     cards = Cards.list_cards_name_and_id()
     currencies = list_currencies()
@@ -27,26 +27,27 @@ defmodule FlWeb.ExpenseLive.FormComponent do
   end
 
   @impl true
-  def handle_event("validate", %{"expense" => expense_params}, socket) do
+  def handle_event("validate", %{"total_expense" => total_expense_params}, socket) do
     changeset =
-      socket.assigns.expense
-      |> Expenses.change_expense(expense_params)
+      socket.assigns.total_expense
+      |> TotalExpenses.change_total_expense(total_expense_params)
       |> Map.put(:action, :validate)
       |> IO.inspect()
 
     {:noreply, assign(socket, changeset: changeset)}
   end
 
-  def handle_event("save", %{"expense" => expense_params}, socket) do
-    save_expense(socket, socket.assigns.action, expense_params)
+  def handle_event("save", %{"total_expense" => total_expense_params}, socket) do
+    save_total_expense(socket, socket.assigns.action, total_expense_params)
   end
 
-  defp save_expense(socket, :edit, expense_params) do
-    case Expenses.update_expense(socket.assigns.expense, expense_params) |> IO.inspect() do
-      {:ok, _expense} ->
+  defp save_total_expense(socket, :edit, total_expense_params) do
+    case TotalExpenses.update_total_expense(socket.assigns.total_expense, total_expense_params)
+         |> IO.inspect() do
+      {:ok, _total_expense} ->
         {:noreply,
          socket
-         |> put_flash(:info, "Expense updated successfully")
+         |> put_flash(:info, "TotalExpense updated successfully")
          |> push_redirect(to: socket.assigns.return_to)}
 
       {:error, %Ecto.Changeset{} = changeset} ->
@@ -54,20 +55,23 @@ defmodule FlWeb.ExpenseLive.FormComponent do
     end
   end
 
-  defp save_expense(socket, :new, expense_params) do
-    expense_params = value_to_money(expense_params)
+  defp save_total_expense(socket, :total_new, total_expense_params),
+    do: save_total_expense(socket, :new, total_expense_params)
+
+  defp save_total_expense(socket, :new, total_expense_params) do
+    total_expense_params = value_to_money(total_expense_params)
     timezone = socket.assigns.timezone
 
-    socket.assigns.expense
-    |> Expenses.change_expense(expense_params)
-    |> Expenses.to_map()
+    socket.assigns.total_expense
+    |> TotalExpenses.change_total_expense(total_expense_params)
+    |> TotalExpenses.to_map()
     |> format_timestamp_params(timezone)
-    |> Fl.Expenses.create_expense()
+    |> Fl.TotalExpenses.create_total_expense()
     |> case do
-      {:ok, _expense} ->
+      {:ok, _total_expense} ->
         {:noreply,
          socket
-         |> put_flash(:info, "Expense created successfully")
+         |> put_flash(:info, "TotalExpense created successfully")
          |> push_redirect(to: socket.assigns.return_to)}
 
       {:error, %Ecto.Changeset{} = changeset} ->

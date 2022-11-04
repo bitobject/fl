@@ -16,6 +16,10 @@
     <%= label f, :img %>
     <%= text_input f, :img %>
     <%= error_tag f, :img %>
+
+    <%= label f, :group_id %>
+    <%= text_input f, :group_id %>
+    <%= error_tag f, :group_id %>
   
     <div>
       <%= submit "Save", phx_disable_with: "Saving..." %>

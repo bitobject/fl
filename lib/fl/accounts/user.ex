@@ -1,13 +1,19 @@
 defmodule Fl.Accounts.User do
   use Ecto.Schema
   import Ecto.Changeset
+  alias Fl.Groups.Group
 
   schema "users" do
+    field :name, :string
+    # TODO should do to upload an image
+    field :img, :string
     field :email, :string
     field :timezone, :string, default: "Etc/UTC"
     field :password, :string, virtual: true, redact: true
     field :hashed_password, :string, redact: true
     field :confirmed_at, :naive_datetime
+
+    belongs_to(:group, Group)
 
     timestamps()
   end
@@ -31,7 +37,7 @@ defmodule Fl.Accounts.User do
   """
   def registration_changeset(user, attrs, opts \\ []) do
     user
-    |> cast(attrs, [:email, :password])
+    |> cast(attrs, [:email, :password, :name])
     |> validate_email()
     |> validate_password(opts)
   end
@@ -112,6 +118,15 @@ defmodule Fl.Accounts.User do
     user
     |> cast(attrs, [:timezone])
     |> validate_required([:timezone])
+  end
+
+  @doc """
+  Validates the group otherwise adds an error to the changeset.
+  """
+  def change_user_group(user, attrs) do
+    user
+    |> cast(attrs, [:group_id])
+    |> validate_required([:group_id])
   end
 
   defp validate_email(changeset) do

@@ -6,7 +6,7 @@ defmodule Fl.Expenses.Expense do
     field :img, :string, default: "img"
     field :name, :string
     field :timestamp, :naive_datetime, autogenerate: {__MODULE__, :utc_now, []}
-    field :type, :string, default: "cash"
+    field :type, Ecto.Enum, values: [:card, :cash]
     field :value, Money.Ecto.Map.Type
     # field :value, :map
     field :card_id, :id

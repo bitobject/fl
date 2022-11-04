@@ -37,7 +37,7 @@ defmodule Fl.Groups do
 
   """
   def get_group_without_current_user(id, user_id \\ 0)
-
+  def get_group_without_current_user(nil, _user_id), do: nil
   def get_group_without_current_user(id, user_id) do
     users_query = where(User, [u], u.group_id == ^id and u.id != ^user_id)
 

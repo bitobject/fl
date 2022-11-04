@@ -23,7 +23,6 @@ defmodule FlWeb.TotalExpenseLive.Index do
            list_total_expenses_by_period(:month, [group_id: u.group_id], timezone)
          }}
       end)
-      |> IO.inspect()
 
     {:ok,
      assign(socket,

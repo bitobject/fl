@@ -32,7 +32,6 @@ defmodule FlWeb.TotalExpenseLive.FormComponent do
       socket.assigns.total_expense
       |> TotalExpenses.change_total_expense(total_expense_params)
       |> Map.put(:action, :validate)
-      |> IO.inspect()
 
     {:noreply, assign(socket, changeset: changeset)}
   end
@@ -42,8 +41,7 @@ defmodule FlWeb.TotalExpenseLive.FormComponent do
   end
 
   defp save_total_expense(socket, :edit, total_expense_params) do
-    case TotalExpenses.update_total_expense(socket.assigns.total_expense, total_expense_params)
-         |> IO.inspect() do
+    case TotalExpenses.update_total_expense(socket.assigns.total_expense, total_expense_params) do
       {:ok, _total_expense} ->
         {:noreply,
          socket

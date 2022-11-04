@@ -32,7 +32,6 @@ defmodule FlWeb.ExpenseLive.FormComponent do
       socket.assigns.expense
       |> Expenses.change_expense(expense_params)
       |> Map.put(:action, :validate)
-      |> IO.inspect()
 
     {:noreply, assign(socket, changeset: changeset)}
   end
@@ -42,7 +41,7 @@ defmodule FlWeb.ExpenseLive.FormComponent do
   end
 
   defp save_expense(socket, :edit, expense_params) do
-    case Expenses.update_expense(socket.assigns.expense, expense_params) |> IO.inspect() do
+    case Expenses.update_expense(socket.assigns.expense, expense_params) do
       {:ok, _expense} ->
         {:noreply,
          socket

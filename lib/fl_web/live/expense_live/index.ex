@@ -82,12 +82,10 @@ defmodule FlWeb.ExpenseLive.Index do
   end
 
   defp apply_action(socket, :total_new, _params) do
-    total_expense =
-      %TotalExpense{
-        timestamp: local_now(socket.assigns.current_user.timezone),
-        group_id: socket.assigns.current_user.group_id
-      }
-      |> IO.inspect()
+    total_expense = %TotalExpense{
+      timestamp: local_now(socket.assigns.current_user.timezone),
+      group_id: socket.assigns.current_user.group_id
+    }
 
     socket
     |> assign(:page_title, "New TotalExpense")

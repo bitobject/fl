@@ -17,20 +17,29 @@ defmodule FlWeb.ExpenseLive.Index do
     group = Groups.get_group_without_current_user(user.group_id, user.id)
 
     group_expenses =
-      Enum.map(group.users, fn u ->
-        {u,
-         {
-           list_expenses_by_period(:day, [user_id: u.id], timezone),
-           list_expenses_by_period(:week, [user_id: u.id], timezone),
-           list_expenses_by_period(:month, [user_id: u.id], timezone)
-         }}
-      end)
+      if group do
+        Enum.map(group.users, fn u ->
+          {u,
+           {
+             list_expenses_by_period(:day, [user_id: u.id], timezone),
+             list_expenses_by_period(:week, [user_id: u.id], timezone),
+             list_expenses_by_period(:month, [user_id: u.id], timezone)
+           }}
+        end)
+      else
+        []
+      end
 
-    total_expenses = {
-      list_total_expenses_by_period(:day, [group_id: user.group_id], timezone),
-      list_total_expenses_by_period(:week, [group_id: user.group_id], timezone),
-      list_total_expenses_by_period(:month, [group_id: user.group_id], timezone)
-    }
+    total_expenses =
+      if group do
+        {
+          list_total_expenses_by_period(:day, [group_id: user.group_id], timezone),
+          list_total_expenses_by_period(:week, [group_id: user.group_id], timezone),
+          list_total_expenses_by_period(:month, [group_id: user.group_id], timezone)
+        }
+      else
+        {[], [], []}
+      end
 
     {:ok,
      assign(socket,

@@ -4,7 +4,7 @@ defmodule Fl.Expenses.Expense do
 
   schema "expenses" do
     field :img, :string, default: "img"
-    field :name, :string
+    field :description, :string
     field :timestamp, :utc_datetime
     field :type, Ecto.Enum, values: [:card, :cash]
     field :value, Money.Ecto.Map.Type
@@ -19,8 +19,17 @@ defmodule Fl.Expenses.Expense do
   @doc false
   def changeset(expense, attrs) do
     expense
-    |> cast(attrs, [:name, :img, :timestamp, :type, :value, :card_id, :category_id, :user_id])
-    |> validate_required([:name, :img, :timestamp, :type, :value, :category_id, :user_id])
+    |> cast(attrs, [
+      :description,
+      :img,
+      :timestamp,
+      :type,
+      :value,
+      :card_id,
+      :category_id,
+      :user_id
+    ])
+    |> validate_required([:description, :img, :timestamp, :type, :value, :category_id, :user_id])
 
     # |> validate_money(:value)
   end

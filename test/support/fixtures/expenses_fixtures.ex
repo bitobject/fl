@@ -12,7 +12,7 @@ defmodule Fl.ExpensesFixtures do
       attrs
       |> Enum.into(%{
         img: "some img",
-        name: "some name",
+        description: "some description",
         timestamp: ~N[2022-10-22 22:38:00],
         type: "some type"
       })
@@ -29,7 +29,7 @@ defmodule Fl.ExpensesFixtures do
       attrs
       |> Enum.into(%{
         img: "some img",
-        name: "some name",
+        description: "some description",
         timestamp: ~N[2022-10-22 22:39:00],
         type: "some type",
         value: 120.5
@@ -47,7 +47,7 @@ defmodule Fl.ExpensesFixtures do
       attrs
       |> Enum.into(%{
         img: "some img",
-        name: "some name",
+        description: "some description",
         timestamp: ~N[2022-10-22 22:41:00],
         type: "some type",
         value: 120.5

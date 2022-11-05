@@ -9,7 +9,7 @@
     phx-change="validate"
     phx-submit="save">
 
-    <%= FlWeb.Components.Inputs.text_input(%{f: f, field: :name}) %>
+    <%= FlWeb.Components.Inputs.text_input(%{f: f, field: :description}) %>
     <%= FlWeb.Components.Inputs.select_input(%{f: f, field: :type, options: Ecto.Enum.values(Fl.TotalExpenses.TotalExpense, :type)}) %>
     <%= FlWeb.Components.Inputs.select_input(%{f: f, field: :category_id, options: @categories}) %>
     <%= FlWeb.Components.Inputs.select_input(%{f: f, field: :card_id, options: [@first_oprtion] ++ @cards, class: "uppercase"}) %>

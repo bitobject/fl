@@ -11,7 +11,7 @@ defmodule Fl.TotalExpensesFixtures do
     {:ok, total_expense} =
       attrs
       |> Enum.into(%{
-        name: "some name",
+        description: "some description",
         timestamp: ~N[2022-11-02 22:58:00],
         type: :card,
         value: %{}

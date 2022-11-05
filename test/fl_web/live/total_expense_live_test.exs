@@ -5,19 +5,19 @@ defmodule FlWeb.TotalExpenseLiveTest do
   import Fl.TotalExpensesFixtures
 
   @create_attrs %{
-    name: "some name",
+    description: "some description",
     timestamp: %{day: 2, hour: 22, minute: 58, month: 11, year: 2022},
     type: :card,
     value: %{}
   }
   @update_attrs %{
-    name: "some updated name",
+    description: "some updated description",
     timestamp: %{day: 3, hour: 22, minute: 58, month: 11, year: 2022},
     type: :cash,
     value: %{}
   }
   @invalid_attrs %{
-    name: nil,
+    description: nil,
     timestamp: %{day: 30, hour: 22, minute: 58, month: 2, year: 2022},
     type: nil,
     value: nil
@@ -35,7 +35,7 @@ defmodule FlWeb.TotalExpenseLiveTest do
       {:ok, _index_live, html} = live(conn, Routes.total_expense_index_path(conn, :index))
 
       assert html =~ "Listing Total expenses"
-      assert html =~ total_expense.name
+      assert html =~ total_expense.description
     end
 
     test "saves new total_expense", %{conn: conn} do
@@ -57,7 +57,7 @@ defmodule FlWeb.TotalExpenseLiveTest do
         |> follow_redirect(conn, Routes.total_expense_index_path(conn, :index))
 
       assert html =~ "Total expense created successfully"
-      assert html =~ "some name"
+      assert html =~ "some description"
     end
 
     test "updates total_expense in listing", %{conn: conn, total_expense: total_expense} do
@@ -81,7 +81,7 @@ defmodule FlWeb.TotalExpenseLiveTest do
         |> follow_redirect(conn, Routes.total_expense_index_path(conn, :index))
 
       assert html =~ "Total expense updated successfully"
-      assert html =~ "some updated name"
+      assert html =~ "some updated description"
     end
 
     test "deletes total_expense in listing", %{conn: conn, total_expense: total_expense} do
@@ -103,7 +103,7 @@ defmodule FlWeb.TotalExpenseLiveTest do
         live(conn, Routes.total_expense_show_path(conn, :show, total_expense))
 
       assert html =~ "Show Total expense"
-      assert html =~ total_expense.name
+      assert html =~ total_expense.description
     end
 
     test "updates total_expense within modal", %{conn: conn, total_expense: total_expense} do
@@ -126,7 +126,7 @@ defmodule FlWeb.TotalExpenseLiveTest do
         |> follow_redirect(conn, Routes.total_expense_show_path(conn, :show, total_expense))
 
       assert html =~ "Total expense updated successfully"
-      assert html =~ "some updated name"
+      assert html =~ "some updated description"
     end
   end
 end

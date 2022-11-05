@@ -8,7 +8,7 @@ defmodule Fl.TotalExpensesTest do
 
     import Fl.TotalExpensesFixtures
 
-    @invalid_attrs %{name: nil, timestamp: nil, type: nil, value: nil}
+    @invalid_attrs %{description: nil, timestamp: nil, type: nil, value: nil}
 
     test "list_total_expenses/0 returns all total_expenses" do
       total_expense = total_expense_fixture()
@@ -22,7 +22,7 @@ defmodule Fl.TotalExpensesTest do
 
     test "create_total_expense/1 with valid data creates a total_expense" do
       valid_attrs = %{
-        name: "some name",
+        description: "some description",
         timestamp: ~N[2022-11-02 22:58:00],
         type: :card,
         value: %{}
@@ -31,7 +31,7 @@ defmodule Fl.TotalExpensesTest do
       assert {:ok, %TotalExpense{} = total_expense} =
                TotalExpenses.create_total_expense(valid_attrs)
 
-      assert total_expense.name == "some name"
+      assert total_expense.description == "some description"
       assert total_expense.timestamp == ~N[2022-11-02 22:58:00]
       assert total_expense.type == :card
       assert total_expense.value == %{}
@@ -45,7 +45,7 @@ defmodule Fl.TotalExpensesTest do
       total_expense = total_expense_fixture()
 
       update_attrs = %{
-        name: "some updated name",
+        description: "some updated description",
         timestamp: ~N[2022-11-03 22:58:00],
         type: :cash,
         value: %{}
@@ -54,7 +54,7 @@ defmodule Fl.TotalExpensesTest do
       assert {:ok, %TotalExpense{} = total_expense} =
                TotalExpenses.update_total_expense(total_expense, update_attrs)
 
-      assert total_expense.name == "some updated name"
+      assert total_expense.description == "some updated description"
       assert total_expense.timestamp == ~N[2022-11-03 22:58:00]
       assert total_expense.type == :cash
       assert total_expense.value == %{}

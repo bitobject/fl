@@ -154,8 +154,9 @@ defmodule Fl.Expenses do
       |> Repo.all()
       |> Enum.map(&calculate_currencies/1)
       |> Enum.reduce({[], %Money{currency: @main_currency, amount: 0}}, fn i,
-                                                                      {list,
-                                                                       %{amount: amount} = sum} ->
+                                                                           {list,
+                                                                            %{amount: amount} =
+                                                                              sum} ->
         if i.amount_in_main_currency do
           sum = Map.put(sum, :amount, amount + i.amount_in_main_currency)
           {list, sum}

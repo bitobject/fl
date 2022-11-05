@@ -3,7 +3,7 @@ defmodule Fl.Repo.Migrations.CreateExpenses do
 
   def change do
     create table(:expenses) do
-      add :name, :string
+      add :description, :string
       add :img, :string
       add :timestamp, :utc_datetime
       add :type, :string

@@ -6,21 +6,21 @@ defmodule FlWeb.ExpenseLiveTest do
 
   @create_attrs %{
     img: "some img",
-    name: "some name",
+    description: "some description",
     timestamp: %{day: 22, hour: 22, minute: 41, month: 10, year: 2022},
     type: "some type",
     value: 120.5
   }
   @update_attrs %{
     img: "some updated img",
-    name: "some updated name",
+    description: "some updated description",
     timestamp: %{day: 23, hour: 22, minute: 41, month: 10, year: 2022},
     type: "some updated type",
     value: 456.7
   }
   @invalid_attrs %{
     img: nil,
-    name: nil,
+    description: nil,
     timestamp: %{day: 30, hour: 22, minute: 41, month: 2, year: 2022},
     type: nil,
     value: nil

@@ -73,6 +73,7 @@ defmodule FlWeb.Components.Cards do
   end
 
   attr :rest, :global
+
   def total_card(assigns) do
     ~H"""
     <div class={@rest.class}>

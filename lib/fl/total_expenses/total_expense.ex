@@ -3,7 +3,7 @@ defmodule Fl.TotalExpenses.TotalExpense do
   import Ecto.Changeset
 
   schema "total_expenses" do
-    field :name, :string
+    field :description, :string
     field :timestamp, :utc_datetime
     field :type, Ecto.Enum, values: [:card, :cash]
     field :value, Money.Ecto.Map.Type
@@ -17,8 +17,8 @@ defmodule Fl.TotalExpenses.TotalExpense do
   @doc false
   def changeset(total_expense, attrs) do
     total_expense
-    |> cast(attrs, [:name, :timestamp, :type, :value, :card_id, :group_id, :category_id])
-    |> validate_required([:name, :timestamp, :type, :value, :group_id, :category_id])
+    |> cast(attrs, [:description, :timestamp, :type, :value, :card_id, :group_id, :category_id])
+    |> validate_required([:description, :timestamp, :type, :value, :group_id, :category_id])
   end
 
   use ExConstructor

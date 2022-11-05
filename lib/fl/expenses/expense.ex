@@ -5,7 +5,7 @@ defmodule Fl.Expenses.Expense do
   schema "expenses" do
     field :img, :string, default: "img"
     field :name, :string
-    field :timestamp, :naive_datetime, autogenerate: {__MODULE__, :utc_now, []}
+    field :timestamp, :utc_datetime
     field :type, Ecto.Enum, values: [:card, :cash]
     field :value, Money.Ecto.Map.Type
     # field :value, :map
@@ -31,8 +31,6 @@ defmodule Fl.Expenses.Expense do
       _, _ -> [value: "must be greater than 0"]
     end)
   end
-
-  defp utc_now, do: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
 
   use ExConstructor
 end

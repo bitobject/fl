@@ -10,6 +10,10 @@ import Config
 config :fl,
   ecto_repos: [Fl.Repo]
 
+config :fl, Fl.Repo, migration_timestamps: [
+  type: :utc_datetime
+]
+
 # Configures the endpoint
 config :fl, FlWeb.Endpoint,
   url: [host: "localhost"],

@@ -125,7 +125,7 @@
 
   html,
   body {
-    @apply p-0 m-0 text-body
+    @apply p-0 m-0 text-body-sm sm:text-body-md md:text-body-lg xl:text-body-base
   }
 
   * {
@@ -191,27 +191,5 @@
     box-shadow: 0px 0px 1rem 0px rgba(34, 60, 80, 0.41);
     border-radius: 0.7rem;
     cursor: pointer;
-  }
-
-}
-
-
-.mt-1000px {
-  margin-top: 1000px;
-  margin-bottom: 200px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-section.section {
-  margin-top: 100px;
-  width: 500px;
-  color: gray;
-}
-
-.flex-links {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+  }  
 }

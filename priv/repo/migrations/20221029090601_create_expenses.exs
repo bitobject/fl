@@ -5,7 +5,7 @@ defmodule Fl.Repo.Migrations.CreateExpenses do
     create table(:expenses) do
       add :name, :string
       add :img, :string
-      add :timestamp, :naive_datetime
+      add :timestamp, :utc_datetime
       add :type, :string
       add :value, :map
       add :card_id, references(:cards, on_delete: :nothing)

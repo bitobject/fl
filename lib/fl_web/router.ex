@@ -17,6 +17,12 @@ defmodule FlWeb.Router do
     plug :accepts, ["json"]
   end
 
+  scope "/", FlWeb do
+    pipe_through :browser
+
+    live "/", PageLive.Index, :index
+  end
+
   if Mix.env() in [:dev, :test] do
     import Phoenix.LiveDashboard.Router
 
@@ -61,10 +67,9 @@ defmodule FlWeb.Router do
     put "/users/settings", UserSettingsController, :update
     get "/users/settings/confirm_email/:token", UserSettingsController, :confirm_email
 
-    live "/", ExpenseLive.Index, :index
-    live "/expenses/new", ExpenseLive.Index, :new
+    live "/expenses", ExpenseLive.Index, :index
+    live "/expenses/new", ExpenseLive.New, :new
     live "/expenses/:id/edit", ExpenseLive.Index, :edit
-    live "/expenses/total_new", ExpenseLive.Index, :total_new
 
     live "/expenses/:id", ExpenseLive.Show, :show
     live "/expenses/:id/show/edit", ExpenseLive.Show, :edit
@@ -98,7 +103,7 @@ defmodule FlWeb.Router do
     live "/users/:id/show/edit", UserLive.Show, :edit
 
     live "/total_expenses", TotalExpenseLive.Index, :index
-    live "/total_expenses/new", TotalExpenseLive.Index, :new
+    live "/total_expenses/new", TotalExpenseLive.New, :new
     live "/total_expenses/:id/edit", TotalExpenseLive.Index, :edit
 
     live "/total_expenses/:id", TotalExpenseLive.Show, :show

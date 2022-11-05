@@ -1,6 +1,5 @@
 defmodule FlWeb.LiveAuth do
-  import Phoenix.LiveView
-  import Phoenix.Component
+  use FlWeb, :live_component
 
   alias Fl.Accounts
 
@@ -16,7 +15,10 @@ defmodule FlWeb.LiveAuth do
     if socket.assigns.current_user.confirmed_at do
       {:cont, socket}
     else
-      {:halt, redirect(socket, to: "/login")}
+      {:halt, redirect(socket, to: Routes.user_session_path(socket, :new))}
     end
   end
+
+  def on_mount(:default, _params, _, socket),
+    do: {:halt, redirect(socket, to: Routes.user_session_path(socket, :new))}
 end

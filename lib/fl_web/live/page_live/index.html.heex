@@ -1,0 +1,40 @@
+<section class="flex">
+  <%= live_redirect to: Routes.expense_new_path(@socket, :new), class: "block" do %>
+    <FlWeb.Components.Card.main_card id="new_expense" title="Expense" class="w-36 text-center">
+    +
+    </FlWeb.Components.Card.main_card>
+  <% end %>
+  <%= live_redirect to: Routes.total_expense_new_path(@socket, :new), class: "block" do %>
+    <FlWeb.Components.Card.main_card id="total_new_expense" title="Total Expense" class="w-36 text-center">
+    +
+    </FlWeb.Components.Card.main_card>
+  <% end %>
+  <%= live_redirect to: Routes.expense_index_path(@socket, :index), class: "block" do %>
+    <FlWeb.Components.Card.main_card id="expenses" title="History" class="w-36 text-center">
+    +
+    </FlWeb.Components.Card.main_card>
+  <% end %>
+</section>
+<div class="flex w-full mb-12">
+  <div class="grid gap-4 mr-4">
+    <div class="text-center">YOU</div>  
+    <FlWeb.Components.Card.card id="day_expenses" title="Today's Expense" expenses={@day_expenses} />
+    <FlWeb.Components.Card.card id="week_expenses" title="Week's Expense" expenses={@week_expenses} />
+    <FlWeb.Components.Card.card id="month_expenses" title="Month's Expense" expenses={@month_expenses} />      
+  </div>
+  <%= for {u, {day_expenses, week_expenses, month_expenses}} <- @group_expenses do %>
+    <div class="grid gap-4 mr-4">
+      <div class="text-center"><%= u.name || u.email %></div>
+      <FlWeb.Components.Card.card id="day_expenses" title="Today's Expense" expenses={day_expenses} />
+      <FlWeb.Components.Card.card id="week_expenses" title="Week's Expense" expenses={week_expenses} />
+      <FlWeb.Components.Card.card id="month_expenses" title="Month's Expense" expenses={month_expenses} />      
+    </div>
+  <% end %>
+  <%  {day_expenses, week_expenses, month_expenses} = @total_expenses %>
+    <div class="grid gap-4 mr-4">
+      <div class="text-center">Total</div>
+      <FlWeb.Components.Card.card id="day_expenses" title="Today's Expense" expenses={day_expenses} />
+      <FlWeb.Components.Card.card id="week_expenses" title="Week's Expense" expenses={week_expenses} />
+      <FlWeb.Components.Card.card id="month_expenses" title="Month's Expense" expenses={month_expenses} />      
+    </div>
+</div>

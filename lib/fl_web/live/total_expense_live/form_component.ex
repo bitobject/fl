@@ -53,9 +53,6 @@ defmodule FlWeb.TotalExpenseLive.FormComponent do
     end
   end
 
-  defp save_total_expense(socket, :total_new, total_expense_params),
-    do: save_total_expense(socket, :new, total_expense_params)
-
   defp save_total_expense(socket, :new, total_expense_params) do
     total_expense_params = value_to_money(total_expense_params)
     timezone = socket.assigns.timezone

@@ -1,19 +1,5 @@
 <h1 class="text-3xl uppercase font-bold text-center w-full mb-12">listing total_expenses</h1>
 
-<%= if @live_action in [:new, :edit] do %>
-  <.modal return_to={Routes.total_expense_index_path(@socket, :index)}>
-    <.live_component
-      module={FlWeb.TotalExpenseLive.FormComponent}
-      id={@total_expense.id || :new}
-      title={@page_title}
-      action={@live_action}
-      total_expense={@total_expense}
-      timezone={@timezone}
-      return_to={Routes.total_expense_index_path(@socket, :index)}
-    />
-  </.modal>
-<% end %>
-
 <div class="flex w-full mb-12">
   <div class="grid gap-4 mr-4">
     <div class="text-center">YOU</div>  
@@ -30,7 +16,7 @@
     </div>
   <% end %>  
 </div>
-<%= live_patch to: Routes.total_expense_index_path(@socket, :new), class: "block" do %>
+<%= live_redirect to: Routes.total_expense_index_path(@socket, :new), class: "block" do %>
   <FlWeb.Components.Card.main_card id="new_total_expense" title="Add TotalExpense" />
 <% end %>
 <table>

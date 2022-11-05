@@ -1,0 +1,10 @@
+<.live_component
+  module={FlWeb.ExpenseLive.FormComponent}
+  id={@expense.id || :new}
+  title={@page_title}
+  action={@live_action}
+  expense={@expense}
+  timezone={@timezone}
+  return_to={Routes.page_index_path(@socket, :index)}
+/>
+

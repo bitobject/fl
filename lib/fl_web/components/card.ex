@@ -9,7 +9,7 @@ defmodule FlWeb.Components.Card do
         <div class="p-4 break-words">
           <p class="font-semibold"><%= @title %></p>
           <%= for expense <- @expenses do %>
-            <h5 class="text-2xl font-bold">
+            <h5 class="font-bold">
               <%= expense.currency %>
               <%= expense.amount %>
             </h5>
@@ -26,10 +26,10 @@ defmodule FlWeb.Components.Card do
   def main_card(assigns) do
     ~H"""
     <div {@rest}>
-      <div class="w-full max-w-xs p-4 bg-gray-900 rounded-2xl text-center text-gray-200 py-12">
-        <h5 class="text-2xl font-bold"><%= @title %></h5>
+      <div class="w-24 p-4 bg-gray-900 rounded-2xl text-center text-gray-200 mx-auto mb-4">
         <%= render_slot(@inner_block) %>
       </div>
+      <h5 class="font-bold"><%= @title %></h5>
     </div>
     """
   end

@@ -46,17 +46,6 @@ defmodule FlWeb.TotalExpenseLive.Index do
     |> assign(:total_expense, TotalExpenses.get_total_expense!(id))
   end
 
-  defp apply_action(socket, :new, _params) do
-    total_expense = %TotalExpense{
-      timestamp: local_now(socket.assigns.current_user.timezone),
-      group_id: socket.assigns.current_user.group_id
-    }
-
-    socket
-    |> assign(:page_title, "New TotalExpense")
-    |> assign(:total_expense, total_expense)
-  end
-
   defp apply_action(socket, :index, _params) do
     socket
     |> assign(:page_title, "Listing TotalExpenses")
@@ -78,8 +67,6 @@ defmodule FlWeb.TotalExpenseLive.Index do
   defp list_total_expenses_by_period(period, params, timezone) do
     TotalExpenses.list_total_expenses_by_period(period, params, timezone)
   end
-
-  defp local_now(timezone), do: Timex.now(timezone)
 
   defp shift_to_local_time(timestamp, timezone),
     do: Timex.shift(timestamp, seconds: Timex.now(timezone).utc_offset)

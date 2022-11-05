@@ -19,7 +19,7 @@ module.exports = {
     },
     fontSize: {
       "body-base": "calc(16px + 0.3vw)",
-      "body-sm": "2.8vw",
+      "body-sm": "3.7vw",
       "body-md": "2.2vw",
       "body-lg": "calc(20px - 0.1vw)",
       "xs": ["0.75rem", { lineHeight: "1rem" }],

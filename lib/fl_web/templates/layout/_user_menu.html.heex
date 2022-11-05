@@ -4,7 +4,7 @@
   <li class="p-2 text-xl"><%= link "Settings", to: Routes.user_settings_path(@conn, :edit) %></li>
   <li class="p-2 text-xl"><%= link "Log out", to: Routes.user_session_path(@conn, :delete), method: :delete %></li>
   <li class="p-2 text-xl">|</li>
-  <li class="p-2 text-xl"><%= link "Expenses", to: Routes.expense_index_path(@conn, :index) %></li>
+  <li class="p-2 text-xl"><%= link "Home", to: Routes.page_index_path(@conn, :index) %></li>
 <% else %>
   <li class="p-2 text-xl"><%= link "Register", to: Routes.user_registration_path(@conn, :new) %></li>
   <li class="p-2 text-xl"><%= link "Log in", to: Routes.user_session_path(@conn, :new) %></li>

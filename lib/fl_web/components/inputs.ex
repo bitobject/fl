@@ -13,7 +13,7 @@ defmodule FlWeb.Components.Inputs do
         <%= label @f, @field, class: "block p-2 font-bold" %>
         <%= error_tag @f, @field, class: "block" %>
       </div>
-      <%= text_input @f, @field, "phx-debounce": "500", class: "bg-white rounded-2xl w-full max-w-xs" %>
+      <%= text_input @f, @field, "phx-debounce": "500", class: "bg-white rounded-2xl w-full max-w-xs text-lg" %>
     </div>
     """
   end
@@ -30,7 +30,7 @@ defmodule FlWeb.Components.Inputs do
         <%= label @f, @field, class: "block p-2 font-bold" %>
         <%= error_tag @f, @field, class: "block" %>
       </div>
-      <%= select @f, @field, @options, "phx-debounce": "500", class: "bg-white rounded-2xl w-full max-w-xs #{@class}" %>
+      <%= select @f, @field, @options, "phx-debounce": "500", class: "bg-white rounded-2xl w-full max-w-xs text-lg #{@class}" %>
     </div>
     """
   end
@@ -45,7 +45,7 @@ defmodule FlWeb.Components.Inputs do
         <%= label @f, @field, class: "block p-2 font-bold" %>
         <%= error_tag @f, @field, class: "block" %>
       </div>
-      <%= number_input @f, @field, step: "any", "phx-debounce": "500", class: "bg-white rounded-2xl w-full max-w-xs" %>
+      <%= number_input @f, @field, step: "any", "phx-debounce": "500", class: "bg-white rounded-2xl w-full max-w-xs text-lg" %>
     </div>
     """
   end
@@ -60,7 +60,7 @@ defmodule FlWeb.Components.Inputs do
         <%= label @f, @field, class: "block p-2 font-bold" %>
         <%= error_tag @f, @field, class: "block" %>
       </div>
-      <%= datetime_select_with_hidden_time @f, @field, "phx-debounce": "500", class: "bg-white rounded-2xl w-full max-w-xs" %>
+      <%= datetime_select_with_hidden_time @f, @field, "phx-debounce": "500", class: "bg-white rounded-2xl w-full max-w-xs text-lg" %>
     </div>
     """
   end
@@ -91,7 +91,7 @@ defmodule FlWeb.Components.Inputs do
         <%= label @f, @field, class: "block p-2 font-bold" %>
         <%= error_tag @f, @field, class: "block" %>
       </div>
-      <%= password_input @f, @field, required: @required, "phx-debounce": "500", class: "bg-white rounded-2xl w-full max-w-xs" %>
+      <%= password_input @f, @field, required: @required, "phx-debounce": "500", class: "bg-white rounded-2xl w-full max-w-xs text-lg" %>
     </div>
     """
   end
@@ -114,7 +114,7 @@ defmodule FlWeb.Components.Inputs do
             end %>
         <%= error_tag @f, @field, class: "block" %>
       </div>
-      <%= checkbox @f, @field, required: @required, "phx-debounce": "500", class: "bg-white rounded-xl w-8 max-w-xs h-8 #{@class}" %>
+      <%= checkbox @f, @field, required: @required, "phx-debounce": "500", class: "bg-white rounded-xl w-8 max-w-xs text-lg h-8 #{@class}" %>
     </div>
     """
   end
@@ -124,7 +124,7 @@ defmodule FlWeb.Components.Inputs do
   def submit_button(assigns) do
     ~H"""
     <div class="block">
-      <%= submit @label, class: "bg-white rounded-2xl w-full max-w-xs p-2 border mt-4 uppercase font-semibold" %>
+      <%= submit @label, class: "bg-white rounded-2xl w-full max-w-xs text-lg p-2 border mt-4 uppercase font-semibold" %>
     </div>
     """
   end

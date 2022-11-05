@@ -24,8 +24,7 @@
 <div class="rounded-2xl border border-gray-900 border-4 p-4 grid gap-4 max-w-lg">
   <p class="text-sm font-semibold text-gray-400"><%= @group.type %></p>
   <%= for {u, {day_expenses, week_expenses, month_expenses} = group_expense}  <- @group_expenses do %>
-  <FlWeb.Components.Cards.group_card id="day_expenses" title="Today" u={u} group_expense={group_expense} expenses={day_expenses} class="rounded-2xl border border-gray-900 border-4 mb-4" />
-  <FlWeb.Components.Cards.group_card id="day_expenses" title="Today" u={u} group_expense={group_expense} expenses={day_expenses} class="rounded-2xl border border-gray-900 border-4" />
+    <FlWeb.Components.Cards.group_card id="day_expenses" title="Today" u={u} group_expense={group_expense} expenses={day_expenses} class="rounded-2xl border border-gray-900 border-4 mb-4" />
   <% end %>
 </div>
 </div>

@@ -1,14 +1,14 @@
 <h1 class="text-3xl uppercase font-bold text-center w-full mb-12">listing expenses</h1>
 <section class="flex">
   <%= live_redirect to: Routes.expense_new_path(@socket, :new), class: "block" do %>
-    <FlWeb.Components.Card.main_card id="new_expense" title="Expense" class="w-36 text-center">
+    <FlWeb.Components.Cards.button_card id="new_expense" title="Expense" class="w-36 text-center">
     +
-    </FlWeb.Components.Card.main_card>
+    </FlWeb.Components.Cards.button_card>
   <% end %>
   <%= live_redirect to: Routes.total_expense_new_path(@socket, :new), class: "block" do %>
-    <FlWeb.Components.Card.main_card id="total_new_expense" title="Total Expense" class="w-36 text-center">
+    <FlWeb.Components.Cards.button_card id="total_new_expense" title="Total Expense" class="w-36 text-center">
     +
-    </FlWeb.Components.Card.main_card>
+    </FlWeb.Components.Cards.button_card>
   <% end %>
 </section>
 <table>

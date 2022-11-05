@@ -30,7 +30,7 @@ defmodule FlWeb.PageLive.Index do
         []
       end
 
-    total_expenses =
+    total_expense =
       if group do
         {
           list_total_expenses_by_period(:day, [group_id: user.group_id], timezone),
@@ -49,7 +49,8 @@ defmodule FlWeb.PageLive.Index do
        month_expenses: list_expenses_by_period(:month, params, timezone),
        timezone: timezone,
        group_expenses: group_expenses,
-       total_expenses: total_expenses
+       group: group,
+       total_expense: total_expense
      )}
   end
 

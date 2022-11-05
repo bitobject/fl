@@ -3,21 +3,21 @@
 <div class="flex w-full mb-12">
   <div class="grid gap-4 mr-4">
     <div class="text-center">YOU</div>  
-    <FlWeb.Components.Card.card id="day_total_expenses" title="Today's TotalExpense" expenses={@day_total_expenses} />
-    <FlWeb.Components.Card.card id="week_total_expenses" title="Week's TotalExpense" expenses={@week_total_expenses} />
-    <FlWeb.Components.Card.card id="month_total_expenses" title="Month's TotalExpense" expenses={@month_total_expenses} />      
+    <FlWeb.Components.Cards.card id="day_total_expenses" title="Today's TotalExpense" expenses={@day_total_expenses} />
+    <FlWeb.Components.Cards.card id="week_total_expenses" title="Week's TotalExpense" expenses={@week_total_expenses} />
+    <FlWeb.Components.Cards.card id="month_total_expenses" title="Month's TotalExpense" expenses={@month_total_expenses} />      
   </div>
   <%= for {u, {day_total_expenses, week_total_expenses, month_total_expenses}} <- @group_total_expenses do %>
     <div class="grid gap-4 mr-4">
       <div class="text-center"><%= u.name || u.email %></div>
-      <FlWeb.Components.Card.card id="day_total_expenses" title="Today's TotalExpense" expenses={day_total_expenses} />
-      <FlWeb.Components.Card.card id="week_total_expenses" title="Week's TotalExpense" expenses={week_total_expenses} />
-      <FlWeb.Components.Card.card id="month_total_expenses" title="Month's TotalExpense" expenses={month_total_expenses} />      
+      <FlWeb.Components.Cards.card id="day_total_expenses" title="Today's TotalExpense" expenses={day_total_expenses} />
+      <FlWeb.Components.Cards.card id="week_total_expenses" title="Week's TotalExpense" expenses={week_total_expenses} />
+      <FlWeb.Components.Cards.card id="month_total_expenses" title="Month's TotalExpense" expenses={month_total_expenses} />      
     </div>
   <% end %>  
 </div>
 <%= live_redirect to: Routes.total_expense_index_path(@socket, :new), class: "block" do %>
-  <FlWeb.Components.Card.main_card id="new_total_expense" title="Add TotalExpense" />
+  <FlWeb.Components.Cards.button_card id="new_total_expense" title="Add TotalExpense" />
 <% end %>
 <table>
   <thead>

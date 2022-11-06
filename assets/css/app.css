@@ -125,7 +125,7 @@
 
   html,
   body {
-    @apply p-0 m-0 text-body-sm sm:text-body-md md:text-body-lg xl:text-body-base
+    @apply p-0 m-0 text-body-sm sm:text-body-lg xl:text-body-base
   }
 
   * {

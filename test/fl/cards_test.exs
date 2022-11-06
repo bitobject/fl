@@ -18,6 +18,9 @@ defmodule Fl.CardsTest do
     test "get_card!/1 returns the card with given id" do
       card = card_fixture()
       assert Cards.get_card!(card.id) == card
+      assert %Card{} = fetched_card = Cards.get_card!(card.id)
+      assert card.name == fetched_card.name
+      assert card.img == fetched_card.img
     end
 
     test "create_card/1 with valid data creates a card" do

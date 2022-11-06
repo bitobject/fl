@@ -12,7 +12,7 @@ defmodule Fl.CategoriesFixtures do
       attrs
       |> Enum.into(%{
         img: "some img",
-        description: "some description"
+        name: "some name"
       })
       |> Fl.Categories.create_category()
 

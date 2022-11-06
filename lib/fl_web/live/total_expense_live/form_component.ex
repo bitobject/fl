@@ -81,7 +81,8 @@ defmodule FlWeb.TotalExpenseLive.FormComponent do
   end
 
   defp format_timestamp_params(%{timestamp: timestamp} = params, timezone) do
-    %{params | timestamp: timestamp |> Timex.to_datetime(timezone) |> Timex.to_naive_datetime()}
+    now = Timex.now(timezone)
+    %{params | timestamp: Timex.shift(timestamp, seconds: -1 * now.utc_offset)}
   end
 
   defp value_to_money(%{"value" => ""} = params), do: Map.delete(params, "value")

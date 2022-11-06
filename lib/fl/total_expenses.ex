@@ -174,48 +174,24 @@ defmodule Fl.TotalExpenses do
 
   def get_timestamps_by_period(:week, timezone) do
     time = Timex.now(timezone)
-
-    start_ts =
-      time
-      |> Timex.beginning_of_week()
-      |> Timex.shift(seconds: -1 * time.utc_offset)
-
-    end_ts =
-      time
-      |> Timex.end_of_week()
-      |> Timex.shift(seconds: -1 * time.utc_offset)
+    start_ts = Timex.beginning_of_week(time)
+    end_ts = Timex.end_of_week(time)
 
     {start_ts, end_ts}
   end
 
   def get_timestamps_by_period(:month, timezone) do
     time = Timex.now(timezone)
-
-    start_ts =
-      time
-      |> Timex.beginning_of_month()
-      |> Timex.shift(seconds: -1 * time.utc_offset)
-
-    end_ts =
-      time
-      |> Timex.end_of_month()
-      |> Timex.shift(seconds: -1 * time.utc_offset)
+    start_ts = Timex.beginning_of_month(time)
+    end_ts = Timex.end_of_month(time)
 
     {start_ts, end_ts}
   end
 
   def get_timestamps_by_period(:day, timezone) do
     time = Timex.now(timezone)
-
-    start_ts =
-      time
-      |> Timex.beginning_of_day()
-      |> Timex.shift(seconds: -1 * time.utc_offset)
-
-    end_ts =
-      time
-      |> Timex.end_of_day()
-      |> Timex.shift(seconds: -1 * time.utc_offset)
+    start_ts = Timex.beginning_of_day(time)
+    end_ts = Timex.end_of_day(time)
 
     {start_ts, end_ts}
   end

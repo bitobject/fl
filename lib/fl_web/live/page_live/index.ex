@@ -72,7 +72,4 @@ defmodule FlWeb.PageLive.Index do
   defp list_total_expenses_by_period(period, params, timezone) do
     TotalExpenses.list_total_expenses_by_period(period, params, timezone)
   end
-
-  defp shift_to_local_time(timestamp, timezone),
-    do: Timex.shift(timestamp, seconds: Timex.now(timezone).utc_offset)
 end

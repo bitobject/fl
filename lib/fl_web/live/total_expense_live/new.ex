@@ -22,7 +22,4 @@ defmodule FlWeb.TotalExpenseLive.New do
   end
 
   defp local_now(timezone), do: Timex.now(timezone)
-
-  defp shift_to_local_time(timestamp, timezone),
-    do: Timex.shift(timestamp, seconds: Timex.now(timezone).utc_offset)
 end

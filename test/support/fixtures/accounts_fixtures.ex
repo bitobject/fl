@@ -10,11 +10,8 @@ defmodule Fl.AccountsFixtures do
   def user_fixture(attrs \\ %{}) do
     {:ok, user} =
       attrs
-      |> Enum.into(%{
-        img: "some img",
-        name: "some name"
-      })
-      |> Fl.Accounts.create_user()
+      |> valid_user_attributes()
+      |> Fl.Accounts.register_user()
 
     user
   end
@@ -24,18 +21,11 @@ defmodule Fl.AccountsFixtures do
 
   def valid_user_attributes(attrs \\ %{}) do
     Enum.into(attrs, %{
+      img: "some img",
+      name: "some name",
       email: unique_user_email(),
       password: valid_user_password()
     })
-  end
-
-  def user_fixture(attrs \\ %{}) do
-    {:ok, user} =
-      attrs
-      |> valid_user_attributes()
-      |> Fl.Accounts.register_user()
-
-    user
   end
 
   def extract_user_token(fun) do

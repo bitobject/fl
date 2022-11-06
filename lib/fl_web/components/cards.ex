@@ -36,10 +36,10 @@ defmodule FlWeb.Components.Cards do
 
   attr :title, :string, required: true
 
-  def group_card(assigns) do
+  def expense_card(assigns) do
     ~H"""
-    <div class="w-full max-w-md rounded-2xl border border-gray-900 border-4 p-4">
-      <p class="text-sm font-semibold"><%= @u.email %></p>
+    <div class={"rounded-2xl border border-gray-900 border-4 p-4" <> " " <> @classes}>
+      <p class="text-sm font-semibold"><%= @title %></p>
       <ul class="grid grid-cols-3 text-sm text-gray-400">
         <li class="">today</li>
         <li class="">week</li>
@@ -47,59 +47,21 @@ defmodule FlWeb.Components.Cards do
       </ul>
       <ul class="grid grid-cols-3">
         <li class="">
-          <%= for expense <- elem(@group_expense, 0) do %>
+          <%= for expense <- elem(@total_expense, 0) do %>
             <div class="items-center text-gray-900 break-words">
               <p class="text-md font-bold"><%= expense.currency %> <%= expense.amount %></p>
             </div>
           <% end %>
         </li>
         <li class="">
-          <%= for expense <- elem(@group_expense, 1) do %>
+          <%= for expense <- elem(@total_expense, 1) do %>
             <div class="items-center text-gray-900 break-words">
               <p class="text-md font-bold"><%= expense.currency %> <%= expense.amount %></p>
             </div>
           <% end %>
         </li>
         <li class="">
-          <%= for expense <- elem(@group_expense, 2) do %>
-            <div class="items-center text-gray-900 break-words">
-              <p class="text-md font-bold"><%= expense.currency %> <%= expense.amount %></p>
-            </div>
-          <% end %>
-        </li>
-      </ul>
-    </div>
-    """
-  end
-
-  attr :rest, :global
-
-  def total_card(assigns) do
-    ~H"""
-    <div class={@rest.class}>
-      <p class="text-sm font-semibold"><%= @rest.title %></p>
-      <ul class="grid grid-cols-3 text-sm text-gray-400">
-        <li class="">today</li>
-        <li class="">week</li>
-        <li class="">month</li>
-      </ul>
-      <ul class="grid grid-cols-3">
-        <li class="">
-          <%= for expense <- elem(@rest.total_expense, 0) do %>
-            <div class="items-center text-gray-900 break-words">
-              <p class="text-md font-bold"><%= expense.currency %> <%= expense.amount %></p>
-            </div>
-          <% end %>
-        </li>
-        <li class="">
-          <%= for expense <- elem(@rest.total_expense, 1) do %>
-            <div class="items-center text-gray-900 break-words">
-              <p class="text-md font-bold"><%= expense.currency %> <%= expense.amount %></p>
-            </div>
-          <% end %>
-        </li>
-        <li class="">
-          <%= for expense <- elem(@rest.total_expense, 2) do %>
+          <%= for expense <- elem(@total_expense, 2) do %>
             <div class="items-center text-gray-900 break-words">
               <p class="text-md font-bold"><%= expense.currency %> <%= expense.amount %></p>
             </div>

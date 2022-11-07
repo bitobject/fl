@@ -12,7 +12,7 @@ let chart = {
       labels: labels,
       datasets: [{
         label: this.el.dataset.label,
-        data: [0, 0, 0],
+        data: [100, 100, 100],
         backgroundColor: [
           'rgba(201, 203, 207, 0.2)',
           'rgba(7, 89, 133, 0.2)',

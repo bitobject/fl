@@ -7,6 +7,7 @@ defmodule FlWeb.ExpenseLive.Index do
   alias Fl.Groups
   alias Fl.TotalExpenses
   alias Fl.TotalExpenses.TotalExpense
+  alias Phoenix.LiveView.JS
 
   @impl true
   def mount(_params, _session, socket) do
@@ -54,4 +55,10 @@ defmodule FlWeb.ExpenseLive.Index do
 
   defp shift_to_local_time(timestamp, timezone),
     do: Timex.shift(timestamp, seconds: Timex.now(timezone).utc_offset)
+
+  def toggle_row(id, js \\ %JS{}) do
+    js
+    |> JS.toggle(to: "##{id}", in: "fade-in-scale", out: "fade-out-scale", display: "table-row")
+    |> JS.set_attribute({"COLSPAN", "5"}, to: "##{id}")
+  end
 end

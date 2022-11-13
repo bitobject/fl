@@ -4,12 +4,11 @@ defmodule Fl.Expenses.Expense do
 
   schema "expenses" do
     field :img, :string, default: "img"
-    field :year_month_classifier, :utc_datetime, redact: true
     field :description, :string
     field :timestamp, :utc_datetime
     field :type, Ecto.Enum, values: [:card, :cash]
     field :value, Money.Ecto.Map.Type
-    # field :value, :map
+    field :year_month_classifier, :utc_datetime, redact: true
     field :card_id, :id
     field :category_id, :id
     field :user_id, :id
@@ -21,7 +20,6 @@ defmodule Fl.Expenses.Expense do
   def changeset(expense, attrs) do
     expense
     |> cast(attrs, [
-      :year_month_classifier,
       :description,
       :img,
       :timestamp,
@@ -32,7 +30,6 @@ defmodule Fl.Expenses.Expense do
       :user_id
     ])
     |> validate_required([
-      :year_month_classifier,
       :description,
       :img,
       :timestamp,
@@ -41,6 +38,8 @@ defmodule Fl.Expenses.Expense do
       :category_id,
       :user_id
     ])
+    |> unique_constraint([:id, :year_month_classifier])
+    |> change_field(:year_month_classifier)
 
     # |> validate_money(:value)
   end
@@ -50,6 +49,17 @@ defmodule Fl.Expenses.Expense do
       _, %Money{amount: value} when value > 0 -> []
       _, _ -> [value: "must be greater than 0"]
     end)
+  end
+
+  defp change_field(changeset, :year_month_classifier) do
+    timestamp =
+      changeset
+      |> fetch_field(:timestamp)
+      |> elem(1)
+      |> Timex.beginning_of_month()
+      |> Timex.to_datetime()
+
+    put_change(changeset, :year_month_classifier, timestamp)
   end
 
   use ExConstructor

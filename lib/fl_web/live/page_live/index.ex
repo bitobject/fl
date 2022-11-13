@@ -51,6 +51,9 @@ defmodule FlWeb.PageLive.Index do
 
   defp extract_expense_for_chartjs({[], [], []}), do: [0, 0, 0]
 
+  defp extract_expense_for_chartjs({[], [], [month | _]}),
+    do: [0, 0, month.amount]
+
   defp extract_expense_for_chartjs({[], [week | _], [month | _]}),
     do: [0, week.amount, month.amount]
 

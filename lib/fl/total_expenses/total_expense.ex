@@ -18,8 +18,21 @@ defmodule Fl.TotalExpenses.TotalExpense do
   @doc false
   def changeset(total_expense, attrs) do
     total_expense
-    |> cast(attrs, [:description, :timestamp, :type, :value, :year_month_classifier, :card_id, :group_id, :category_id])
-    |> validate_required([:description, :timestamp, :type, :value, :year_month_classifier, :group_id, :category_id])
+    |> cast(attrs, [:description, :timestamp, :type, :value, :card_id, :group_id, :category_id])
+    |> unique_constraint([:id, :year_month_classifier])
+    |> validate_required([:description, :timestamp, :type, :value, :group_id, :category_id])
+    |> change_field(:year_month_classifier)
+  end
+
+  defp change_field(changeset, :year_month_classifier) do
+    timestamp =
+      changeset
+      |> fetch_field(:timestamp)
+      |> elem(1)
+      |> Timex.beginning_of_month()
+      |> Timex.to_datetime()
+
+    put_change(changeset, :year_month_classifier, timestamp)
   end
 
   use ExConstructor

@@ -124,12 +124,12 @@ defmodule Fl.Expenses do
     |> Map.drop([:__meta__])
   end
 
-  def list_expenses_by_period_new_1(params, timezone \\ "Etc/UTC") do
-    {day_start_time, day_end_time} = get_timestamps_by_period(:day, timezone)
-
-    {week_start_time, week_end_time} = get_timestamps_by_period(:week, timezone)
-
-    {month_start_time, month_end_time} = get_timestamps_by_period(:month, timezone)
+  def list_expenses_by_day_by_week_by_month(params, timezone \\ "Etc/UTC") do
+      {day_start_time_unix, day_end_time_unix} = get_timestamps_by_period(:day, timezone, type: :unix)
+      {week_start_time_unix, week_end_time_unix} = get_timestamps_by_period(:week, timezone, type: :unix)
+      {month_start_time, month_end_time} = get_timestamps_by_period(:month, timezone)
+      month_start_time_unix = Timex.to_unix(month_start_time)
+      month_end_time_unix = Timex.to_unix(month_end_time)
 
     {day, week, month} =
       Expense
@@ -154,115 +154,45 @@ defmodule Fl.Expenses do
         fn
           {currency, amount, timestamp}, {day, week, month} ->
             cond do
-              DateTime.compare(timestamp, week_start_time) in [:gt, :eq] &&
-                  DateTime.compare(timestamp, day_end_time) in [:lt, :eq] ->
-                day_expense_value = Map.get(day, currency, 0)
-                week_expense_value = Map.get(week, currency, 0)
-                month_expense_value = Map.get(month, currency, 0)
+              Timex.to_unix(timestamp) in day_start_time_unix..day_end_time_unix ->
+               day_expense_value = Map.get(day, currency, 0)
+               week_expense_value = Map.get(week, currency, 0)
+               month_expense_value = Map.get(month, currency, 0)
 
-                {
-                  Map.put(day, currency, day_expense_value + amount),
-                  Map.put(week, currency, week_expense_value + amount),
-                  Map.put(month, currency, month_expense_value + amount)
-                }
+               {
+                 Map.put(day, currency, day_expense_value + amount),
+                 Map.put(week, currency, week_expense_value + amount),
+                 Map.put(month, currency, month_expense_value + amount)
+               }
 
-              DateTime.compare(timestamp, day_start_time) in [:gt, :eq] &&
-                  DateTime.compare(timestamp, week_end_time) in [:lt, :eq] ->
-                week_expense_value = Map.get(week, currency, 0)
-                month_expense_value = Map.get(month, currency, 0)
+               Timex.to_unix(timestamp) in week_start_time_unix..week_end_time_unix ->
+               week_expense_value = Map.get(week, currency, 0)
+               month_expense_value = Map.get(month, currency, 0)
 
-                {
-                  day,
-                  Map.put(week, currency, week_expense_value + amount),
-                  Map.put(month, currency, month_expense_value + amount)
-                }
+               {
+                 day,
+                 Map.put(week, currency, week_expense_value + amount),
+                 Map.put(month, currency, month_expense_value + amount)
+               }
 
-              DateTime.compare(timestamp, month_start_time) in [:gt, :eq] &&
-                  DateTime.compare(timestamp, month_end_time) in [:lt, :eq] ->
-                month_expense_value = Map.get(month, currency, 0)
+               Timex.to_unix(timestamp) in month_start_time_unix..month_end_time_unix ->
+               month_expense_value = Map.get(month, currency, 0)
 
-                {
-                  day,
-                  week,
-                  Map.put(month, currency, month_expense_value + amount)
-                }
+               {
+                 day,
+                 week,
+                 Map.put(month, currency, month_expense_value + amount)
+               }
 
-              true ->
-                {day, week, month}
-            end
+             true ->
+               {day, week, month}
+           end
         end
       )
 
     {Map.to_list(day) |> Enum.map(&calculate_currencies/1),
      Map.to_list(week) |> Enum.map(&calculate_currencies/1),
      Map.to_list(month) |> Enum.map(&calculate_currencies/1)}
-  end
-
-  def list_expenses_by_period_new(params, timezone \\ "Etc/UTC") do
-    {day_start_time, day_end_time} = get_timestamps_by_period(:day, timezone)
-    {week_start_time, week_end_time} = get_timestamps_by_period(:week, timezone)
-    {month_start_time, month_end_time} = get_timestamps_by_period(:month, timezone)
-
-    {day, week, month} =
-      Expense
-      |> where(^params)
-      # |> where([e], ^month_start_time <= e.timestamp and e.timestamp <= ^month_end_time)
-      |> where([e], ^month_start_time <= e.timestamp and e.timestamp <= ^month_end_time)
-      # |> select([e], fragment("SUM((?->>?)::integer)", e.value, "amount") )
-      # |> group_by([e], [fragment("date(?)", e.timestamp), fragment("(?->>?)", e.value, "currency")])
-      |> select([e], {
-        fragment("(?->>?)", e.value, "currency"),
-        fragment("(?->>?)::integer", e.value, "amount"),
-        e.timestamp
-      })
-      |> Repo.all()
-      |> Enum.reduce(
-        {%{}, %{}, %{}},
-        fn
-          {currency, amount, timestamp}, {day, week, month} ->
-            cond do
-              DateTime.compare(timestamp, week_start_time) in [:gt, :eq] &&
-                  DateTime.compare(timestamp, day_end_time) in [:lt, :eq] ->
-                day_expense_value = Map.get(day, currency, 0)
-                week_expense_value = Map.get(week, currency, 0)
-                month_expense_value = Map.get(month, currency, 0)
-
-                {
-                  Map.put(day, currency, day_expense_value + amount),
-                  Map.put(week, currency, week_expense_value + amount),
-                  Map.put(month, currency, month_expense_value + amount)
-                }
-
-              DateTime.compare(timestamp, day_start_time) in [:gt, :eq] &&
-                  DateTime.compare(timestamp, week_end_time) in [:lt, :eq] ->
-                week_expense_value = Map.get(week, currency, 0)
-                month_expense_value = Map.get(month, currency, 0)
-
-                {
-                  day,
-                  Map.put(week, currency, week_expense_value + amount),
-                  Map.put(month, currency, month_expense_value + amount)
-                }
-
-              DateTime.compare(timestamp, month_start_time) in [:gt, :eq] &&
-                  DateTime.compare(timestamp, month_end_time) in [:lt, :eq] ->
-                month_expense_value = Map.get(month, currency, 0)
-
-                {
-                  day,
-                  week,
-                  Map.put(month, currency, month_expense_value + amount)
-                }
-
-              true ->
-                {day, week, month}
-            end
-        end
-      )
-
-    {day |> Map.to_list() |> Enum.map(&calculate_currencies/1),
-     week |> Map.to_list() |> Enum.map(&calculate_currencies/1),
-     month |> Map.to_list() |> Enum.map(&calculate_currencies/1)}
   end
 
   @doc """
@@ -313,34 +243,65 @@ defmodule Fl.Expenses do
     []
   end
 
-  def get_timestamps_by_period(:year, timezone) do
+  def get_timestamps_by_period(period, timezone, opts \\ [])
+  def get_timestamps_by_period(:year, timezone, opts) do
     time = Timex.now(timezone)
-    start_ts = Timex.beginning_of_year(time)
-    end_ts = Timex.end_of_year(time)
+
+    start_ts =
+      time
+      |> Timex.beginning_of_year()
+      |> to_unix?(opts)
+
+    end_ts =
+      time
+      |> Timex.end_of_year()
+      |> to_unix?(opts)
 
     {start_ts, end_ts}
   end
 
-  def get_timestamps_by_period(:week, timezone) do
+  def get_timestamps_by_period(:month, timezone, opts) do
     time = Timex.now(timezone)
-    start_ts = Timex.beginning_of_week(time)
-    end_ts = Timex.end_of_week(time)
+
+    start_ts =
+      time
+      |> Timex.beginning_of_month()
+      |> to_unix?(opts)
+
+    end_ts =
+      time
+      |> Timex.end_of_month()
+      |> to_unix?(opts)
 
     {start_ts, end_ts}
   end
 
-  def get_timestamps_by_period(:month, timezone) do
+  def get_timestamps_by_period(:week, timezone, opts) do
     time = Timex.now(timezone)
-    start_ts = Timex.beginning_of_month(time)
-    end_ts = Timex.end_of_month(time)
+    start_ts =
+      time
+      |> Timex.beginning_of_week()
+      |> to_unix?(opts)
+
+    end_ts =
+      time
+      |> Timex.end_of_week()
+      |> to_unix?(opts)
 
     {start_ts, end_ts}
   end
 
-  def get_timestamps_by_period(:day, timezone) do
+  def get_timestamps_by_period(:day, timezone, opts) do
     time = Timex.now(timezone)
-    start_ts = Timex.beginning_of_day(time)
-    end_ts = Timex.end_of_day(time)
+    start_ts =
+      time
+      |> Timex.beginning_of_day()
+      |> to_unix?(opts)
+
+    end_ts =
+      time
+      |> Timex.end_of_day()
+      |> to_unix?(opts)
 
     {start_ts, end_ts}
   end
@@ -365,4 +326,7 @@ defmodule Fl.Expenses do
   defp calculate_currencies({k, v}) do
     %{currency: k, amount: v, amount_in_main_currency: nil, main_currency: @main_currency}
   end
+
+  defp to_unix?(time, type: :unix), do: Timex.to_unix(time)
+  defp to_unix?(time, _list), do: time
 end

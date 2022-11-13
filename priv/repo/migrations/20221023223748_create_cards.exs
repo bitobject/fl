@@ -3,7 +3,7 @@ defmodule Fl.Repo.Migrations.CreateCards do
 
   def change do
     create table(:cards) do
-      add :name, :string
+      add :name, :string, null: false
       add :img, :string
 
       timestamps()

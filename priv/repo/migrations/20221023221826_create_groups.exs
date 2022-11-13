@@ -3,7 +3,7 @@ defmodule Fl.Repo.Migrations.CreateGroups do
 
   def change do
     create table(:groups) do
-      add :type, :string
+      add :type, :string, null: false
 
       timestamps()
     end

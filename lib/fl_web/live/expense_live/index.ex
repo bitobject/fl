@@ -3,10 +3,7 @@ defmodule FlWeb.ExpenseLive.Index do
   on_mount FlWeb.LiveAuth
 
   alias Fl.Expenses
-  alias Fl.Expenses.Expense
-  alias Fl.Groups
   alias Fl.TotalExpenses
-  alias Fl.TotalExpenses.TotalExpense
   alias Phoenix.LiveView.JS
 
   @impl true

@@ -7,7 +7,8 @@ defmodule Fl.TotalExpenses do
   alias Fl.Repo
 
   alias Fl.TotalExpenses.TotalExpense
-  @periods ~w(day week month)a
+
+  @periods ~w(day week month year)a
   @main_currency "AMD"
 
   defdelegate apply_changes(changesetr), to: Ecto.Changeset
@@ -124,6 +125,74 @@ defmodule Fl.TotalExpenses do
     |> Map.drop([:__meta__])
   end
 
+  def list_expenses_by_period_new_1(params, timezone \\ "Etc/UTC") do
+    {day_start_time, day_end_time} = get_timestamps_by_period(:day, timezone)
+    {week_start_time, week_end_time} = get_timestamps_by_period(:week, timezone)
+    {month_start_time, month_end_time} = get_timestamps_by_period(:month, timezone)
+
+    {day, week, month} =
+      TotalExpense
+      |> where(^params)
+      |> where([e], ^month_start_time <= e.timestamp and e.timestamp <= ^month_end_time)
+      |> group_by([e], [
+        fragment("DATE_TRUNC('day', ?)", e.timestamp),
+        fragment("(?->>?)", e.value, "currency")
+      ])
+      |> select([e], {
+        fragment("(?->>?)", e.value, "currency"),
+        fragment("SUM((?->>?)::integer)", e.value, "amount"),
+        fragment("DATE_TRUNC('day', ?)", e.timestamp)
+      })
+      |> Repo.all()
+      |> Enum.reduce(
+        {%{}, %{}, %{}},
+        fn
+          {currency, amount, timestamp}, {day, week, month} ->
+            cond do
+              DateTime.compare(timestamp, week_start_time) in [:gt, :eq] &&
+                  DateTime.compare(timestamp, day_end_time) in [:lt, :eq] ->
+                day_expense_value = Map.get(day, currency, 0)
+                week_expense_value = Map.get(week, currency, 0)
+                month_expense_value = Map.get(month, currency, 0)
+
+                {
+                  Map.put(day, currency, day_expense_value + amount),
+                  Map.put(week, currency, week_expense_value + amount),
+                  Map.put(month, currency, month_expense_value + amount)
+                }
+
+              DateTime.compare(timestamp, day_start_time) in [:gt, :eq] &&
+                  DateTime.compare(timestamp, week_end_time) in [:lt, :eq] ->
+                week_expense_value = Map.get(week, currency, 0)
+                month_expense_value = Map.get(month, currency, 0)
+
+                {
+                  day,
+                  Map.put(week, currency, week_expense_value + amount),
+                  Map.put(month, currency, month_expense_value + amount)
+                }
+
+              DateTime.compare(timestamp, month_start_time) in [:gt, :eq] &&
+                  DateTime.compare(timestamp, month_end_time) in [:lt, :eq] ->
+                month_expense_value = Map.get(month, currency, 0)
+
+                {
+                  day,
+                  week,
+                  Map.put(month, currency, month_expense_value + amount)
+                }
+
+              true ->
+                {day, week, month}
+            end
+        end
+      )
+
+    {Map.to_list(day) |> Enum.map(&calculate_currencies/1),
+     Map.to_list(week) |> Enum.map(&calculate_currencies/1),
+     Map.to_list(month) |> Enum.map(&calculate_currencies/1)}
+  end
+
   @doc """
   Returns the list of sorted by params total_expenses for a period.
   #TODO write all periods
@@ -170,6 +239,14 @@ defmodule Fl.TotalExpenses do
 
   def list_total_expenses_by_period(_period, _params, _) do
     []
+  end
+
+  def get_timestamps_by_period(:year, timezone) do
+    time = Timex.now(timezone)
+    start_ts = Timex.beginning_of_year(time)
+    end_ts = Timex.end_of_year(time)
+
+    {start_ts, end_ts}
   end
 
   def get_timestamps_by_period(:week, timezone) do

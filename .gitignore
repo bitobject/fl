@@ -32,3 +32,5 @@ fl-*.tar
 npm-debug.log
 /assets/node_modules/
 
+# Elixir Ls
+/.elixir_ls

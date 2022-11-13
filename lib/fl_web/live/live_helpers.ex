@@ -1,5 +1,4 @@
 defmodule FlWeb.LiveHelpers do
-  import Phoenix.LiveView
   import Phoenix.LiveView.Helpers
   import Phoenix.Component
 

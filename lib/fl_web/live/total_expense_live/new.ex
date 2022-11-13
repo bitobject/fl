@@ -2,10 +2,6 @@ defmodule FlWeb.TotalExpenseLive.New do
   use FlWeb, :live_view
   on_mount FlWeb.LiveAuth
 
-  alias Fl.Expenses
-  alias Fl.Expenses.Expense
-  alias Fl.Groups
-  alias Fl.TotalExpenses
   alias Fl.TotalExpenses.TotalExpense
 
   @impl true

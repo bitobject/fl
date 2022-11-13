@@ -20,18 +20,6 @@ defmodule Fl.AccountsTest do
       assert Accounts.get_user!(user.id) == user
     end
 
-    test "create_user/1 with valid data creates a user" do
-      valid_attrs = %{img: "some img", name: "some name"}
-
-      assert {:ok, %User{} = user} = Accounts.create_user(valid_attrs)
-      assert user.img == "some img"
-      assert user.name == "some name"
-    end
-
-    test "create_user/1 with invalid data returns error changeset" do
-      assert {:error, %Ecto.Changeset{}} = Accounts.create_user(@invalid_attrs)
-    end
-
     test "update_user/2 with valid data updates the user" do
       user = user_fixture()
       update_attrs = %{img: "some updated img", name: "some updated name"}

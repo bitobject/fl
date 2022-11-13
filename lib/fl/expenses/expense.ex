@@ -4,6 +4,7 @@ defmodule Fl.Expenses.Expense do
 
   schema "expenses" do
     field :img, :string, default: "img"
+    field :year_month_classifier, :utc_datetime, redact: true
     field :description, :string
     field :timestamp, :utc_datetime
     field :type, Ecto.Enum, values: [:card, :cash]
@@ -20,6 +21,7 @@ defmodule Fl.Expenses.Expense do
   def changeset(expense, attrs) do
     expense
     |> cast(attrs, [
+      :year_month_classifier,
       :description,
       :img,
       :timestamp,
@@ -29,7 +31,16 @@ defmodule Fl.Expenses.Expense do
       :category_id,
       :user_id
     ])
-    |> validate_required([:description, :img, :timestamp, :type, :value, :category_id, :user_id])
+    |> validate_required([
+      :year_month_classifier,
+      :description,
+      :img,
+      :timestamp,
+      :type,
+      :value,
+      :category_id,
+      :user_id
+    ])
 
     # |> validate_money(:value)
   end

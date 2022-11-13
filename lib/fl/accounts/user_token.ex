@@ -3,7 +3,6 @@ defmodule Fl.Accounts.UserToken do
   import Ecto.Query
   alias Fl.Accounts.UserToken
   alias Fl.Accounts.User
-  alias Fl.Groups.Group
 
   @hash_algorithm :sha256
   @rand_size 32

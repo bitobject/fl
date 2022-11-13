@@ -4,12 +4,12 @@ defmodule Fl.Repo.Migrations.CreateTotalExpenses do
   def change do
     create table(:total_expenses) do
       add :description, :string
-      add :timestamp, :utc_datetime
+      add :timestamp, :timestamptz
       add :type, :string
       add :value, :map
       add :card_id, references(:cards, on_delete: :nothing)
-      add :group_id, references(:groups, on_delete: :nothing)
-      add :category_id, references(:categories, on_delete: :nothing)
+      add :category_id, references(:categories, on_delete: :nothing), null: false
+      add :group_id, references(:groups, on_delete: :nothing), null: false
 
       timestamps()
     end

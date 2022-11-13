@@ -19,6 +19,13 @@ defmodule Fl.Accounts.User do
   end
 
   @doc """
+  A user changeset for changing common fields.
+  """
+  def changeset(user, attrs) do
+    cast(user, attrs, [:img, :name, :timezone])
+  end
+
+  @doc """
   A user changeset for registration.
 
   It is important to validate the length of both email and password.
@@ -37,7 +44,7 @@ defmodule Fl.Accounts.User do
   """
   def registration_changeset(user, attrs, opts \\ []) do
     user
-    |> cast(attrs, [:email, :password, :name])
+    |> cast(attrs, [:email, :password, :name, :timezone])
     |> validate_email()
     |> validate_password(opts)
   end

@@ -45,7 +45,7 @@ defmodule FlWeb do
   def live_view do
     quote do
       use Phoenix.LiveView,
-        layout: {FlWeb.LayoutView, "live.html"}
+        layout: {FlWeb.LayoutView, :live}
 
       unquote(view_helpers())
     end

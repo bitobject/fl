@@ -3,7 +3,6 @@ defmodule FlWeb.TotalExpenseLive.Index do
   on_mount FlWeb.LiveAuth
 
   alias Fl.TotalExpenses
-  alias Fl.TotalExpenses.TotalExpense
   alias Fl.Groups
 
   @impl true

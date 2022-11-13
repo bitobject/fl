@@ -34,7 +34,10 @@ defmodule FlWeb.Components.Cards do
     """
   end
 
+  attr :id, :string, required: true
   attr :title, :string, required: true
+  attr :expense, :list, required: true
+  attr :classes, :string
 
   def expense_card(assigns) do
     ~H"""
@@ -47,21 +50,21 @@ defmodule FlWeb.Components.Cards do
       </ul>
       <ul class="grid grid-cols-3">
         <li class="">
-          <%= for expense <- elem(@total_expense, 0) do %>
+          <%= for expense <- elem(@expense, 0) do %>
             <div class="items-center text-gray-900 break-words">
               <p class="text-md font-bold"><%= expense.currency %> <%= expense.amount %></p>
             </div>
           <% end %>
         </li>
         <li class="">
-          <%= for expense <- elem(@total_expense, 1) do %>
+          <%= for expense <- elem(@expense, 1) do %>
             <div class="items-center text-gray-900 break-words">
               <p class="text-md font-bold"><%= expense.currency %> <%= expense.amount %></p>
             </div>
           <% end %>
         </li>
         <li class="">
-          <%= for expense <- elem(@total_expense, 2) do %>
+          <%= for expense <- elem(@expense, 2) do %>
             <div class="items-center text-gray-900 break-words">
               <p class="text-md font-bold"><%= expense.currency %> <%= expense.amount %></p>
             </div>

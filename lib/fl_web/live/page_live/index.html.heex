@@ -1,5 +1,4 @@
 <div class="mx-2 max-w-lg">
-  <%  {day_expenses, week_expenses, month_expenses} = @total_expense %>
   <section class="grid grid-flow-col">
     <%= live_redirect to: Routes.expense_new_path(@socket, :new), class: "block" do %>
       <FlWeb.Components.Cards.button_card id="new_expense" title="Expense" class="text-center">
@@ -7,19 +6,19 @@
       </FlWeb.Components.Cards.button_card>
     <% end %>
     <%= live_redirect to: Routes.total_expense_new_path(@socket, :new), class: "block" do %>
-      <FlWeb.Components.Cards.button_card id="total_new_expense" title="Total Expense" class="text-center">
+      <FlWeb.Components.Cards.button_card id="new_total_expense" title="Total Expense" class="text-center">
       +
       </FlWeb.Components.Cards.button_card>
     <% end %>
     <%= live_redirect to: Routes.expense_index_path(@socket, :index), class: "block" do %>
-      <FlWeb.Components.Cards.button_card id="expenses" title="History" class="text-center">
+      <FlWeb.Components.Cards.button_card id="expense_history" title="History" class="text-center">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 mx-auto">
           <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 6.75h12M8.25 12h12m-12 5.25h12M3.75 6.75h.007v.008H3.75V6.75zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zM3.75 12h.007v.008H3.75V12zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm-.375 5.25h.007v.008H3.75v-.008zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
         </svg>
       </FlWeb.Components.Cards.button_card>
     <% end %>
     <%= live_redirect to: Routes.total_expense_index_path(@socket, :index), class: "block" do %>
-      <FlWeb.Components.Cards.button_card id="expenses" title="Total History" class="text-center">
+      <FlWeb.Components.Cards.button_card id="total_expense_history" title="Total History" class="text-center">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 mx-auto">
           <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 6.75h12M8.25 12h12m-12 5.25h12M3.75 6.75h.007v.008H3.75V6.75zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zM3.75 12h.007v.008H3.75V12zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm-.375 5.25h.007v.008H3.75v-.008zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
         </svg>
@@ -29,12 +28,18 @@
   <div class="relative max-w-lg h-32">
     <canvas id="myChart" phx-hook="chart" phx-update="ignore" data-label="AMD" role="img"></canvas>
   </div>  
-  <FlWeb.Components.Cards.expense_card id="exp" title="my" total_expense={{@day_expenses, @week_expenses, @month_expenses}} classes="w-full my-4" />
-  <FlWeb.Components.Cards.expense_card id="total" title="total" total_expense={@total_expense} classes="w-full my-4" />
-  <div class="rounded-2xl border border-gray-900 border-4 p-4 grid gap-4">
-    <p class="text-sm font-semibold text-gray-400"><%= @group.type %></p>
-    <%= for {u, {day_expenses, week_expenses, month_expenses} = group_expense}  <- @group_expenses do %>
-      <FlWeb.Components.Cards.expense_card id="day_expenses" title={u.email} total_expense={group_expense} classes="w-full" />
-    <% end %>
-  </div>
+  <FlWeb.Components.Cards.expense_card id="expense" title="my" expense={@expense} classes="w-full my-4" />
+
+  <%= if @total_expense do %>
+    <FlWeb.Components.Cards.expense_card id="total_expense" title="total" expense={@total_expense} classes="w-full my-4" />
+  <% end %>
+
+  <%= if @group_expense do %>
+    <div class="rounded-2xl border border-gray-900 border-4 p-4 grid gap-4">
+      <p class="text-sm font-semibold text-gray-400"><%= @group.type %></p>
+      <%= for {u, group_expense}  <- @group_expense do %>
+        <FlWeb.Components.Cards.expense_card id="group_expense#{u.id}" title={u.email} expense={group_expense} classes="w-full" />
+      <% end %>
+    </div>
+  <% end %>
 </div>

@@ -3,7 +3,6 @@ defmodule FlWeb.UserRegistrationController do
 
   alias Fl.Accounts
   alias Fl.Accounts.User
-  alias FlWeb.UserAuth
 
   def new(conn, _params) do
     changeset = Accounts.change_user_registration(%User{})

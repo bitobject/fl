@@ -4,6 +4,8 @@ defmodule Fl.TotalExpenses do
   """
 
   import Ecto.Query, warn: false
+  import Fl.ContextHelper
+
   alias Fl.Repo
 
   alias Fl.TotalExpenses.TotalExpense
@@ -125,91 +127,114 @@ defmodule Fl.TotalExpenses do
     |> Map.drop([:__meta__])
   end
 
+  def sum_expenses_by_day_by_week_by_month(params, timezone \\ "Etc/UTC") do
+    {day_start_time_unix, day_end_time_unix} =
+      get_timestamps_by_period(:day, timezone, type: :unix)
 
-  def list_expenses_by_day_by_week_by_month(params, timezone \\ "Etc/UTC") do
-    {day_start_time_unix, day_end_time_unix} = get_timestamps_by_period(:day, timezone, type: :unix)
-    {week_start_time_unix, week_end_time_unix} = get_timestamps_by_period(:week, timezone, type: :unix)
+    {week_start_time_unix, week_end_time_unix} =
+      get_timestamps_by_period(:week, timezone, type: :unix)
+
     {month_start_time, month_end_time} = get_timestamps_by_period(:month, timezone)
     month_start_time_unix = Timex.to_unix(month_start_time)
     month_end_time_unix = Timex.to_unix(month_end_time)
 
-  {day, week, month} =
-    TotalExpense
-    |> where(^params)
-    |> where(
-      [e],
-      ^month_start_time <= e.year_month_classifier and
-        e.year_month_classifier <= ^month_end_time
-    )
-    |> group_by([e], [
-      fragment("DATE_TRUNC('day', ?)", e.timestamp),
-      fragment("(?->>?)", e.value, "currency")
-    ])
-    |> select([e], {
-      fragment("(?->>?)", e.value, "currency"),
-      fragment("SUM((?->>?)::integer)", e.value, "amount"),
-      fragment("DATE_TRUNC('day', ?)", e.timestamp)
-      # fragment("cast(extract(epoch from ?) as integer)", e.timestamp)
-    })
-    |> Repo.all()
-    |> Enum.reduce(
-      {%{}, %{}, %{}},
-      fn
-        {currency, amount, timestamp}, {day, week, month} ->
-          cond do
-            Timex.to_unix(timestamp) in day_start_time_unix..day_end_time_unix ->
-             day_expense_value = Map.get(day, currency, 0)
-             week_expense_value = Map.get(week, currency, 0)
-             month_expense_value = Map.get(month, currency, 0)
+    {day, week, month} =
+      TotalExpense
+      |> where(^params)
+      |> where(
+        [e],
+        ^month_start_time <= e.year_month_classifier and
+          e.year_month_classifier <= ^month_end_time
+      )
+      |> group_by([e], [
+        fragment("DATE_TRUNC('day', ?)", e.timestamp),
+        fragment("(?->>?)", e.value, "currency")
+      ])
+      |> select([e], {
+        fragment("(?->>?)", e.value, "currency"),
+        fragment("SUM((?->>?)::integer)", e.value, "amount"),
+        fragment("DATE_TRUNC('day', ?)", e.timestamp)
+      })
+      |> Repo.all()
+      |> Enum.reduce(
+        {%{}, %{}, %{}},
+        fn
+          {currency, amount, timestamp}, {day, week, month} ->
+            cond do
+              Timex.to_unix(timestamp) in day_start_time_unix..day_end_time_unix ->
+                day_expense_value = Map.get(day, currency, 0)
+                week_expense_value = Map.get(week, currency, 0)
+                month_expense_value = Map.get(month, currency, 0)
 
-             {
-               Map.put(day, currency, day_expense_value + amount),
-               Map.put(week, currency, week_expense_value + amount),
-               Map.put(month, currency, month_expense_value + amount)
-             }
+                {
+                  Map.put(day, currency, day_expense_value + amount),
+                  Map.put(week, currency, week_expense_value + amount),
+                  Map.put(month, currency, month_expense_value + amount)
+                }
 
-             Timex.to_unix(timestamp) in week_start_time_unix..week_end_time_unix ->
-             week_expense_value = Map.get(week, currency, 0)
-             month_expense_value = Map.get(month, currency, 0)
+              Timex.to_unix(timestamp) in week_start_time_unix..week_end_time_unix ->
+                week_expense_value = Map.get(week, currency, 0)
+                month_expense_value = Map.get(month, currency, 0)
 
-             {
-               day,
-               Map.put(week, currency, week_expense_value + amount),
-               Map.put(month, currency, month_expense_value + amount)
-             }
+                {
+                  day,
+                  Map.put(week, currency, week_expense_value + amount),
+                  Map.put(month, currency, month_expense_value + amount)
+                }
 
-             Timex.to_unix(timestamp) in month_start_time_unix..month_end_time_unix ->
-             month_expense_value = Map.get(month, currency, 0)
+              Timex.to_unix(timestamp) in month_start_time_unix..month_end_time_unix ->
+                month_expense_value = Map.get(month, currency, 0)
 
-             {
-               day,
-               week,
-               Map.put(month, currency, month_expense_value + amount)
-             }
+                {
+                  day,
+                  week,
+                  Map.put(month, currency, month_expense_value + amount)
+                }
 
-           true ->
-             {day, week, month}
-         end
-      end
-    )
+              true ->
+                {day, week, month}
+            end
+        end
+      )
 
-  {Map.to_list(day) |> Enum.map(&calculate_currencies/1),
-   Map.to_list(week) |> Enum.map(&calculate_currencies/1),
-   Map.to_list(month) |> Enum.map(&calculate_currencies/1)}
-end
+    {Map.to_list(day) |> Enum.map(&calculate_currencies/1),
+     Map.to_list(week) |> Enum.map(&calculate_currencies/1),
+     Map.to_list(month) |> Enum.map(&calculate_currencies/1)}
+  end
 
   @doc """
   Returns the list of sorted by params total_expenses for a period.
   #TODO write all periods
   ## Examples
 
-      iex> list_total_expenses_by_period()
+      iex> list_total_expenses_by()
       [%TotalExpense{}, ...]
 
   """
-  def list_total_expenses_by_period(period, params, timezone \\ "Etc/UTC")
+  def list_total_expenses_by(params) do
+    case Filtrex.parse_params(Fl.TotalExpenses.FilterConfig.total_expense_config(), params) do
+      {:ok, filter} ->
+        TotalExpense
+        |> Filtrex.query(filter)
+        |> Repo.all()
 
-  def list_total_expenses_by_period(period, params, timezone) when period in @periods do
+      {:error, error} ->
+        {:error, error}
+    end
+  end
+
+  @doc """
+  Returns the sum of sorted by params total_expenses for a period.
+  #TODO write all periods
+  ## Examples
+
+      iex> sum_total_expenses_by_period()
+      [%TotalExpense{}, ...]
+
+  """
+  def sum_total_expenses_by_period(period, params, timezone \\ "Etc/UTC")
+
+  def sum_total_expenses_by_period(period, params, timezone) when period in @periods do
     # TODO refactor
     # - slice function on abstract levels
     # - make recurse
@@ -242,71 +267,8 @@ end
     [total_expense_main_currency | total_expense_currencies]
   end
 
-  def list_total_expenses_by_period(_period, _params, _) do
+  def sum_total_expenses_by_period(_period, _params, _) do
     []
-  end
-
-  def get_timestamps_by_period(period, timezone, opts \\ [])
-  def get_timestamps_by_period(:year, timezone, opts) do
-    time = Timex.now(timezone)
-
-    start_ts =
-      time
-      |> Timex.beginning_of_year()
-      |> to_unix?(opts)
-
-    end_ts =
-      time
-      |> Timex.end_of_year()
-      |> to_unix?(opts)
-
-    {start_ts, end_ts}
-  end
-
-  def get_timestamps_by_period(:month, timezone, opts) do
-    time = Timex.now(timezone)
-
-    start_ts =
-      time
-      |> Timex.beginning_of_month()
-      |> to_unix?(opts)
-
-    end_ts =
-      time
-      |> Timex.end_of_month()
-      |> to_unix?(opts)
-
-    {start_ts, end_ts}
-  end
-
-  def get_timestamps_by_period(:week, timezone, opts) do
-    time = Timex.now(timezone)
-    start_ts =
-      time
-      |> Timex.beginning_of_week()
-      |> to_unix?(opts)
-
-    end_ts =
-      time
-      |> Timex.end_of_week()
-      |> to_unix?(opts)
-
-    {start_ts, end_ts}
-  end
-
-  def get_timestamps_by_period(:day, timezone, opts) do
-    time = Timex.now(timezone)
-    start_ts =
-      time
-      |> Timex.beginning_of_day()
-      |> to_unix?(opts)
-
-    end_ts =
-      time
-      |> Timex.end_of_day()
-      |> to_unix?(opts)
-
-    {start_ts, end_ts}
   end
 
   # TODO make this by internet and in memory
@@ -329,7 +291,4 @@ end
   defp calculate_currencies({k, v}) do
     %{currency: k, amount: v, amount_in_main_currency: nil, main_currency: @main_currency}
   end
-
-  defp to_unix?(time, type: :unix), do: Timex.to_unix(time)
-  defp to_unix?(time, _list), do: time
 end

@@ -53,7 +53,8 @@ defmodule Fl.MixProject do
       {:tailwind, "~> 0.1", runtime: Mix.env() == :dev},
       {:exconstructor, "~> 1.2.8"},
       {:money, "~> 1.11"},
-      {:timex, "~> 3.7"}
+      {:timex, "~> 3.7"},
+      {:filtrex, "~> 0.4.3"}
     ]
   end
 

@@ -3,35 +3,13 @@ defmodule FlWeb.TotalExpenseLive.Index do
   on_mount FlWeb.LiveAuth
 
   alias Fl.TotalExpenses
-  alias Fl.Groups
+  alias Phoenix.LiveView.JS
 
   @impl true
   def mount(_params, _session, socket) do
-    params = [group_id: socket.assigns.current_user.group_id]
     timezone = socket.assigns.current_user.timezone
-    user = socket.assigns.current_user
 
-    group = Groups.get_group_without_current_user(user.group_id, user.id)
-
-    group_total_expenses =
-      Enum.map(group.users, fn u ->
-        {u,
-         {
-           list_total_expenses_by_period(:day, [group_id: u.group_id], timezone),
-           list_total_expenses_by_period(:week, [group_id: u.group_id], timezone),
-           list_total_expenses_by_period(:month, [group_id: u.group_id], timezone)
-         }}
-      end)
-
-    {:ok,
-     assign(socket,
-       total_expenses: list_total_expenses(),
-       day_total_expenses: list_total_expenses_by_period(:day, params, timezone),
-       week_total_expenses: list_total_expenses_by_period(:week, params, timezone),
-       month_total_expenses: list_total_expenses_by_period(:month, params, timezone),
-       timezone: timezone,
-       group_total_expenses: group_total_expenses
-     )}
+    {:ok, assign(socket, total_expenses: [], timezone: timezone)}
   end
 
   @impl true
@@ -45,28 +23,59 @@ defmodule FlWeb.TotalExpenseLive.Index do
     |> assign(:total_expense, TotalExpenses.get_total_expense!(id))
   end
 
-  defp apply_action(socket, :index, _params) do
+  defp apply_action(
+         %{assigns: %{current_user: current_user, timezone: timezone}} = socket,
+         :index,
+         _params
+       ) do
     socket
     |> assign(:page_title, "Listing TotalExpenses")
     |> assign(:total_expense, nil)
+    |> assign(
+      :total_expenses,
+      list_total_expenses_by(:month, %{"group_id" => current_user.group_id}, timezone)
+    )
   end
 
   @impl true
-  def handle_event("delete", %{"id" => id}, socket) do
+  def handle_event(
+        "delete",
+        %{"id" => id},
+        %{assigns: %{current_user: current_user, timezone: timezone}} = socket
+      ) do
     total_expense = TotalExpenses.get_total_expense!(id)
     {:ok, _} = TotalExpenses.delete_total_expense(total_expense)
 
-    {:noreply, assign(socket, :total_expenses, list_total_expenses())}
+    {:noreply,
+     assign(
+       socket,
+       :total_expenses,
+       list_total_expenses_by(:month, %{"group_id" => current_user.group_id}, timezone)
+     )}
   end
 
-  defp list_total_expenses do
-    TotalExpenses.list_total_expenses()
-  end
+  defp list_total_expenses_by(period, %{"group_id" => group_id} = params, timezone) do
+    {date_start, date_end} =
+      Fl.ContextHelper.get_timestamps_by_period(:month, timezone, type: :string)
 
-  defp list_total_expenses_by_period(period, params, timezone) do
-    TotalExpenses.list_total_expenses_by_period(period, params, timezone)
+    params = %{
+      "timestamp_on_or_after" => date_start,
+      "timestamp_on_or_before" => date_end,
+      "year_month_classifier_on_or_after" => date_start,
+      "year_month_classifier_on_or_before" => date_end,
+      "group_id" => group_id
+    }
+
+    TotalExpenses.list_total_expenses_by(params)
   end
 
   defp shift_to_local_time(timestamp, timezone),
     do: Timex.shift(timestamp, seconds: Timex.now(timezone).utc_offset)
+
+  def toggle_row(id, caller_id, js \\ %JS{}) do
+    js
+    |> JS.toggle(to: "##{id}", display: "table-row")
+    |> JS.toggle(to: "##{caller_id}", display: "table-row")
+    |> JS.set_attribute({"COLSPAN", "5"}, to: "##{id}")
+  end
 end

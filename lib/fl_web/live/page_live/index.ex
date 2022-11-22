@@ -11,12 +11,12 @@ defmodule FlWeb.PageLive.Index do
     params = [user_id: current_user.id]
     timezone = current_user.timezone
     group = Groups.get_group_without_current_user(current_user.group_id, current_user.id)
-    expense = list_expenses_by_day_by_week_by_month(params, timezone)
+    expense = sum_expenses_by_day_by_week_by_month(params, timezone)
 
     group_expense =
       if group do
         Enum.map(group.users, fn u ->
-          {u, list_expenses_by_day_by_week_by_month([user_id: u.id], timezone)}
+          {u, sum_expenses_by_day_by_week_by_month([user_id: u.id], timezone)}
         end)
       else
         nil
@@ -24,7 +24,7 @@ defmodule FlWeb.PageLive.Index do
 
     total_expense =
       if group do
-        list_total_expenses_by_period([group_id: current_user.group_id], timezone)
+        sum_total_expenses_by_period([group_id: current_user.group_id], timezone)
       else
         nil
       end
@@ -43,11 +43,11 @@ defmodule FlWeb.PageLive.Index do
     {:ok, socket}
   end
 
-  defp list_expenses_by_day_by_week_by_month(params, timezone),
-    do: Expenses.list_expenses_by_day_by_week_by_month(params, timezone)
+  defp sum_expenses_by_day_by_week_by_month(params, timezone),
+    do: Expenses.sum_expenses_by_day_by_week_by_month(params, timezone)
 
-  defp list_total_expenses_by_period(params, timezone),
-    do: TotalExpenses.list_expenses_by_day_by_week_by_month(params, timezone)
+  defp sum_total_expenses_by_period(params, timezone),
+    do: TotalExpenses.sum_expenses_by_day_by_week_by_month(params, timezone)
 
   defp extract_expense_for_chartjs({[], [], []}), do: [0, 0, 0]
 
